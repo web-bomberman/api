@@ -1,45 +1,62 @@
-import { Component, Game } from '@/classes';
+import { Component, GameSession } from '@/classes';
 
 export type Vector = [number, number];
 
 export abstract class GameObject {
+  public readonly session: GameSession;
   public pos: Vector;
-  public readonly components: Component[];
-  public readonly game: Game;
 
-  constructor(pos: Vector, game: Game) {
-    this.pos = pos;
-    this.components = [];
-    this.game = game;
+  private _initialized: boolean;
+  private _components: Component[];
+
+  public get initialized() {
+    return this._initialized;
+  }
+  
+  public get components() {
+    return this._components as readonly Component[];
+  }
+
+  protected constructor(session: GameSession) {
+    this.pos = [0, 0];
+    this.session = session;
+    this._components = [];
+    this._initialized = false;
+  }
+
+  public initialize() {
+    if (this._initialized) {
+      throw new Error("Object already initialized.");
+    }
+    this._initialized = true;
   }
 
   public addComponent(comp: Component) {
-    this.components.push(comp);
+    if (comp.initialized) {
+      throw new Error("Can't call addComponent() outside create() methods.");
+    }
+    this._components.push(comp);
   }
 
   public findComponent(name: string) {
-    for (const comp of this.components) {
+    for (const comp of this._components) {
       if (comp.constructor.name === name) return comp;
     }
     return null;
   }
 
-  public removeComponent(name: string) {
-    for (let i = 0; i < this.components.length; i++) {
-      if (this.components[i].constructor.name === name) {
-        this.components.splice(i, 1);
+  public removeComponent(comp: Component) {
+    for (let i = 0; i < this._components.length; i++) {
+      if (Object.is(this._components[i], comp)) {
+        this._components.splice(i, 1);
         break;
       }
     }
   }
 
-  public deleteSelf() {
-    const gameObjects = this.game.gameObjects;
-    for (let i = 0; i < gameObjects.length; i++) {
-      if (Object.is(gameObjects[i], this)) {
-        gameObjects.splice(i, 1);
-        break;
-      }
+  public removeSelf() {
+    if (this.session) {
+      this.session.removeObject(this);
     }
   }
 }

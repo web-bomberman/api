@@ -47,27 +47,27 @@ export class GameSession {
     for (let i = 0; i < tilemap.length; i++) {
       for (let j = 0; j < tilemap[i].length; j++) {
         switch (tilemap[i][j]) {
-          case 'player1': {
+          case '1': {
             const obj = new Player(1);
-            obj.pos = [i, j];
+            obj.pos = [tilemap[i].length - j, i];
             this.addObject(obj);
             break;
           }
-          case 'player2': {
+          case '2': {
             const obj = new Player(2);
-            obj.pos = [i, j];
+            obj.pos = [tilemap[i].length - j, i];
             this.addObject(obj);
             break;
           }
-          case 'breakable': {
+          case 'X': {
             const obj = new DestructibleBlock();
-            obj.pos = [i, j];
+            obj.pos = [tilemap[i].length - j, i];
             this.addObject(obj);
             break;
           }
-          case 'unbreakable': {
+          case '#': {
             const obj = new IndestructibleBlock();
-            obj.pos = [i, j];
+            obj.pos = [tilemap[i].length - j, i];
             this.addObject(obj);
             break;
           }

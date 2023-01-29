@@ -3,7 +3,6 @@ export * from './components/BlocksPlayer';
 export * from './components/Component';
 export * from './components/Explodable';
 export * from './game-session/GameSession';
-export * from './game-session/Level';
 export * from './game-objects/DestructibleBlock';
 export * from './game-objects/GameObject';
 export * from './game-objects/IndestructibleBlock';

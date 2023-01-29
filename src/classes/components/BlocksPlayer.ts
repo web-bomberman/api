@@ -1,12 +1,12 @@
 import { Component, GameObject } from '@/classes';
 
 export class BlocksPlayer extends Component {
-  constructor(gameObject: GameObject) {
-    super(gameObject);
+  constructor() {
+    super();
   }
 
-  public static blocksPlayer(gameObject: GameObject) {
-    for (const comp of gameObject.components) {
+  public static blocksPlayer(obj: GameObject) {
+    for (const comp of obj.getComponents()) {
       if (comp instanceof BlocksPlayer) {
         return true;
       }

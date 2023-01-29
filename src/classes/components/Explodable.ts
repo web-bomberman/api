@@ -1,27 +1,19 @@
 import { Component, GameObject } from '@/classes';
 
 export class Explodable extends Component {
-  private explodeFunc: () => void;
+  private explodeFunction: () => void;
 
-  constructor(gameObject: GameObject, func: () => void) {
-    super(gameObject);
-    this.explodeFunc = func;
+  constructor(func: () => void) {
+    super();
+    this.explodeFunction = func;
   }
 
-  public static isExplodable(gameObject: GameObject) {
-    for (const comp of gameObject.components) {
-      if (comp instanceof Explodable) {
-        return true;
-      }
-    }
-    return false;
+  public static isExplodable(obj: GameObject) {
+    return !!(obj.findComponent('Explodable'));
   }
 
-  public static explode(gameObject: GameObject) {
-    for (const comp of gameObject.components) {
-      if (comp instanceof Explodable) {
-        comp.explodeFunc();
-      }
-    }
+  public static explode(obj: GameObject) {
+    const comp = obj.findComponent('Explodable') as Explodable;
+    if (comp) comp.explodeFunction();
   }
 }

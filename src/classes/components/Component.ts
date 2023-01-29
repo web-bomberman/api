@@ -1,22 +1,29 @@
 import { GameObject } from '@/classes';
 
 export abstract class Component {
-  public readonly gameObject: GameObject;
+  private gameObject: GameObject | null = null;
 
-  private _initialized: boolean;
+  constructor() {}
 
-  public get initialized() {
-    return this._initialized;
+  public getGameObject() {
+    return this.gameObject;
   }
 
-  private constructor(obj: GameObject) {
+  public setGameObject(obj: GameObject | null) {
+    if (this.gameObject === obj) return;
+    if (!obj) {
+      this.removeSelf();
+      return
+    }
     this.gameObject = obj;
-    this._initialized = false;
+    if (obj) obj.addComponent(this);
   }
-
-  public abstract create(obj: GameObject): void;
 
   public removeSelf() {
-    this.gameObject.removeComponent(this);
+    if (this.gameObject) {
+      const obj = this.gameObject;
+      this.gameObject = null;
+      obj.removeComponent(this);
+    }
   }
 }

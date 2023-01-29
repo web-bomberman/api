@@ -2,62 +2,76 @@ import {
   DestructibleBlock,
   GameObject,
   IndestructibleBlock,
-  Level,
   Player
 } from '@/classes';
 
+export type Tile =
+  | 'floor'
+  | 'breakable'
+  | 'unbreakable'
+  | 'player1'
+  | 'player2';
+
+export type TileMap = Tile[][];
+
 export class GameSession {
   public readonly room: number;
-  public readonly level: Readonly<Level>;
 
-  private _gameObjects: GameObject[];
-  public get gameObjects(): readonly GameObject[] {
-    return this._gameObjects;
-  }
+  private gameObjects: GameObject[] = [];
 
-  constructor(room: number, level: Level) {
+  constructor(room: number, tilemap: TileMap) {
     this.room = room;
-    this.level = level;
-    this._gameObjects = [];
-    this.generateLevel();
+    this.generateLevel(tilemap);
   }
 
-  private generateLevel() {
-    const tilemap = this.level.tilemap;
+  private generateLevel(tilemap: TileMap) {
     for (let i = 0; i < tilemap.length; i++) {
       for (let j = 0; j < tilemap[i].length; j++) {
         switch (tilemap[i][j]) {
-          case 'player1':
-            this._gameObjects.push(new Player(1, [i, j], this));
+          case 'player1': {
+            const obj = new Player(1);
+            this.addObject(obj);
+            obj.pos = [i, j];
             break;
-          case 'player2':
-            this._gameObjects.push(new Player(2, [i, j], this));
+          }
+          case 'player2': {
+            const obj = new Player(2);
+            this.addObject(obj);
+            obj.pos = [i, j];
             break;
-          case 'breakable':
-            this._gameObjects.push(new DestructibleBlock([i, j], this));
+          }
+          case 'breakable': {
+            const obj = new DestructibleBlock();
+            this.addObject(obj);
+            obj.pos = [i, j];
             break;
-          case 'unbreakable':
-            this._gameObjects.push(new IndestructibleBlock([i, j], this));
+          }
+          case 'unbreakable': {
+            const obj = new IndestructibleBlock();
+            this.addObject(obj);
+            obj.pos = [i, j];
             break;
+          }
         }
       }
     }
   }
 
   public addObject(obj: GameObject) {
-    if (obj.initialized) {
-      throw new Error("Can't call addObject() outside create() methods.");
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      if (this.gameObjects[i] === obj) return;
     }
-    this._gameObjects.push(obj);
+    this.gameObjects.push(obj);
+    obj.setSession(this);
   }
 
   public removeObject(obj: GameObject) {
-    for (let i = 0; i < this._gameObjects.length; i++) {
-      if (Object.is(this._gameObjects[i], obj)) {
-        this._gameObjects.splice(i, 1);
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      if (this.gameObjects[i] === obj) {
+        this.gameObjects.splice(i, 1);
+        obj.removeSelf();
         break;
       }
     }
   }
-
 }

@@ -5,19 +5,17 @@ import {
   Player
 } from '@/classes';
 
-export type Tile =
-  | 'floor'
-  | 'breakable'
-  | 'unbreakable'
-  | 'player1'
-  | 'player2';
-
-export type TileMap = Tile[][];
+import {
+  Vector,
+  TileMap
+} from '@/types';
 
 export class GameSession {
   public readonly room: number;
 
   private gameObjects: GameObject[] = [];
+  private gameObjectIds: number[] = [];
+  private objectIdCount: number = 0;
 
   constructor(room: number, tilemap: TileMap) {
     this.room = room;
@@ -62,6 +60,8 @@ export class GameSession {
       if (this.gameObjects[i] === obj) return;
     }
     this.gameObjects.push(obj);
+    this.gameObjectIds.push(this.objectIdCount);
+    this.objectIdCount++;
     obj.setSession(this);
   }
 
@@ -69,9 +69,18 @@ export class GameSession {
     for (let i = 0; i < this.gameObjects.length; i++) {
       if (this.gameObjects[i] === obj) {
         this.gameObjects.splice(i, 1);
+        this.gameObjectIds.splice(i, 1);
         obj.removeSelf();
         break;
       }
     }
+  }
+
+  public checkTile(pos: Vector) {
+    const objects: GameObject[] = [];
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      if (this.gameObjects[i].pos === pos) objects.push(this.gameObjects[i]);
+    }
+    return objects;
   }
 }

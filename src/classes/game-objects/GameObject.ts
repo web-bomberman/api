@@ -1,6 +1,5 @@
 import { Component, GameSession } from '@/classes';
-
-export type Vector = [number, number];
+import { Vector } from '@/types';
 
 export abstract class GameObject {
   public pos: Vector;

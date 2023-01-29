@@ -2,8 +2,9 @@ import {
   BlocksPlayer,
   Explodable,
   GameObject,
-  Vector
 } from '@/classes';
+
+import { Vector } from '@/types';
 
 export class Player extends GameObject {
   public readonly player: 1 | 2;

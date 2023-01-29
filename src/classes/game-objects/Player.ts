@@ -2,6 +2,7 @@ import {
   BlocksPlayer,
   Explodable,
   GameObject,
+  GameSession,
 } from '@/classes';
 
 import { Vector } from '@/types';
@@ -18,7 +19,18 @@ export class Player extends GameObject {
     ));
   }
 
-  public move(distance: Vector) {
-    // aldkfj
+  protected onEnterSession(session: GameSession) {}
+
+  protected onLeaveSession(session: GameSession) {}
+
+  public move(dist: Vector) {
+    const session = this.getSession();
+    if (!session) return;
+    const newPos: Vector = [this.pos[0] + dist[0], this.pos[1] + dist[1]];
+    const objects = session.checkTile(newPos);
+    for (const obj of objects) {
+      if (BlocksPlayer.blocksPlayer(obj)) return;
+    }
+    this.pos = newPos;
   }
 }

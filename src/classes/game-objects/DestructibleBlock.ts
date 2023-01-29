@@ -2,7 +2,8 @@ import {
   BlocksExplosion,
   BlocksPlayer,
   Explodable,
-  GameObject
+  GameObject,
+  GameSession
 } from '@/classes';
 
 export class DestructibleBlock extends GameObject {
@@ -14,4 +15,8 @@ export class DestructibleBlock extends GameObject {
       () => this.removeSelf()
     ));
   }
+
+  protected onEnterSession(session: GameSession) {}
+
+  protected onLeaveSession(session: GameSession) {}
 }

@@ -26,7 +26,10 @@ export abstract class GameObject {
       return
     }
     this.session = session;
-    if (session) session.addObject(this);
+    if (session) {
+      session.addObject(this);
+      this.onEnterSession(session);
+    };
   }
 
   public removeSelf() {
@@ -34,8 +37,13 @@ export abstract class GameObject {
       const session = this.session;
       this.session = null;
       session.removeObject(this);
+      this.onLeaveSession(session);
     }
   }
+
+  protected abstract onEnterSession(session: GameSession): void;
+
+  protected abstract onLeaveSession(session: GameSession): void;
 
   public addComponent(comp: Component) {
     for (let i = 0; i < this.components.length; i++) {

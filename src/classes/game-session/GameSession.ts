@@ -1,5 +1,3 @@
-import { v4 } from 'uuid';
-
 import {
   DestructibleBlock,
   GameObject,
@@ -13,14 +11,14 @@ import {
 } from '@/types';
 
 export class GameSession {
-  public readonly id: string;
+  public readonly id: number;
 
   private gameObjects: GameObject[] = [];
   private gameObjectIds: number[] = [];
   private objectIdCount: number = 0;
 
-  constructor(tilemap: TileMap) {
-    this.id = v4();
+  constructor(id: number, tilemap: TileMap) {
+    this.id = id;
     this.generateLevel(tilemap);
   }
 

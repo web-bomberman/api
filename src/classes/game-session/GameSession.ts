@@ -6,20 +6,31 @@ import {
 } from '@/classes';
 
 import {
-  Vector,
-  TileMap
+  PlayerState,
+  SessionState,
+  TileMap,
+  Vector
 } from '@/types';
 
 export class GameSession {
-  public readonly id: number;
+  public readonly id: string;
+
+  public state: SessionState;
+  public player1: PlayerState;
+  public player2: PlayerState;
 
   private gameObjects: GameObject[] = [];
   private gameObjectIds: number[] = [];
   private objectIdCount: number = 0;
+  private durationSeconds: number = 0;
+  private secondsP1LastPing: number = 0;
+  private secondsP2LastPing: number = 0;
 
-  constructor(id: number, tilemap: TileMap) {
+  constructor(id: string) {
     this.id = id;
-    this.generateLevel(tilemap);
+    this.state = 'room';
+    this.player1 = 'waiting';
+    this.player2 = 'waiting';
   }
 
   public addObject(obj: GameObject) {
@@ -41,6 +52,13 @@ export class GameSession {
         break;
       }
     }
+  }
+
+  public startGame(tilemap: TileMap) {
+    this.generateLevel(tilemap);
+    this.state === 'starting';
+    this.player1 === 'connected';
+    this.player2 === 'connected';
   }
 
   private generateLevel(tilemap: TileMap) {

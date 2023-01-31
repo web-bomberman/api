@@ -4,7 +4,6 @@ import { TileMap } from '@/types';
 export class SessionManager {
   private static instance: SessionManager | undefined;
   private sessions: GameSession[] = [];
-  private idCount: number = 0;
 
   private constructor() {}
 
@@ -19,18 +18,16 @@ export class SessionManager {
     return SessionManager.getInstance().sessions as readonly GameSession[];
   }
 
-  public static findSession(id: number) {
+  public static findSession(id: string) {
     for (const session of SessionManager.getSessions()) {
       if (session.id === id) return session;
     }
     return null;
   }
 
-  public static newSession(map: TileMap) {
-    const instance = SessionManager.getInstance();
-    const session = new GameSession(instance.idCount, map);
-    instance.idCount++;
-    instance.sessions.push(session);
+  public static newSession(id: string) {
+    const session = new GameSession(id);
+    SessionManager.getInstance().sessions.push(session);
     return session;
   }
 

@@ -1,5 +1,5 @@
 import { Component, GameSession } from '@/classes';
-import { Vector } from '@/types';
+import { ParsedGameObject, Vector } from '@/types';
 
 export abstract class GameObject {
   public pos: Vector;
@@ -69,4 +69,6 @@ export abstract class GameObject {
     }
     return null;
   }
+
+  public abstract parse(): ParsedGameObject;
 }

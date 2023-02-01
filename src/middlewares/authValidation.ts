@@ -1,15 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { HttpError } from '@/classes';
+import { HttpError, SessionManager } from '@/classes';
+import { TokenPayload } from '@/types';
 
 const SECRET = process.env.JWT_SECRET as string;
 
-function validateToken(
-  token: string
-) {
+function validateToken(token: string) {
   try {
-    const payload = jwt.verify(token, SECRET);
-    return;
+    const payload = jwt.verify(token, SECRET) as TokenPayload;
+    const session = SessionManager.findSession(payload.session);
+    if (!session) throw new HttpError(404);
+    return { player: payload.player, session };
   } catch (err) {
     throw new HttpError(401);
   }
@@ -17,12 +18,14 @@ function validateToken(
 
 export async function authValidation(
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction
 ) {
   if (!req.headers.authorization) throw new HttpError(401);
   const auth: string = req.headers.authorization;
   if (auth.slice(0, 7) != 'Bearer ') throw new HttpError(401);
-  validateToken(auth.replace('Bearer ', ''));
+  const { player, session } = validateToken(auth.replace('Bearer ', ''));
+  res.locals.player = player;
+  res.locals.session = session;
   next();
 }

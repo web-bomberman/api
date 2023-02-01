@@ -6,6 +6,7 @@ import {
 } from '@/classes';
 
 import {
+  ParsedGameSession,
   PlayerState,
   SessionState,
   TileMap,
@@ -51,6 +52,27 @@ export class GameSession {
         obj.removeSelf();
         break;
       }
+    }
+  }
+
+  public playerPinged(player: 1 | 2) {
+    if (player === 1) this.secondsP1LastPing = 0;
+    else if (player === 2) this.secondsP2LastPing = 0;
+  }
+
+  public parse() {
+    const parsed: ParsedGameSession = {
+      id: this.id,
+      state: this.state,
+      player1: this.player1,
+      player2: this.player2,
+      gameObjects: []
+    };
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      parsed.gameObjects.push({
+        id: this.gameObjectIds[i],
+        ...this.gameObjects[i].parse()
+      });
     }
   }
 

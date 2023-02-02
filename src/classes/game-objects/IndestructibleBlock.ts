@@ -1,8 +1,7 @@
 import {
   BlocksExplosion,
   BlocksPlayer,
-  GameObject,
-  GameSession
+  GameObject
 } from '@/classes';
 
 export class IndestructibleBlock extends GameObject {
@@ -12,7 +11,16 @@ export class IndestructibleBlock extends GameObject {
     this.addComponent(new BlocksExplosion());
   }
 
-  protected onEnterSession(session: GameSession) {}
+  public parse() {
+    return {
+      id: this.id,
+      type: 'indestructible block',
+      position: this.pos,
+      extras: []
+    };
+  }
 
-  protected onLeaveSession(session: GameSession) {}
+  protected onEnterTree() {}
+
+  protected onExitTree() {}
 }

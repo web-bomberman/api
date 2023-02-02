@@ -1,13 +1,9 @@
 import { GameSession } from '@/classes';
 
 export type ParsedGameObject = {
+  id: number | null;
   type: string;
-  extras: string[];
-}
-
-export type ParsedGameObjectWithID = {
-  id: number;
-  type: string;
+  position: Vector;
   extras: string[];
 }
 
@@ -16,7 +12,7 @@ export type ParsedGameSession = {
   state: SessionState;
   player1: PlayerState;
   player2: PlayerState;
-  gameObjects: ParsedGameObjectWithID[];
+  gameObjects: ParsedGameObject[];
 }
 
 export type PlayerState =

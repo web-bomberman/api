@@ -13,4 +13,8 @@ export class BlocksPlayer extends Component {
     }
     return false;
   }
+
+  protected onEnterTree() {}
+
+  protected onExitTree() {}
 }

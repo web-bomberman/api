@@ -2,8 +2,7 @@ import {
   BlocksExplosion,
   BlocksPlayer,
   Explodable,
-  GameObject,
-  GameSession
+  GameObject
 } from '@/classes';
 
 export class DestructibleBlock extends GameObject {
@@ -16,7 +15,16 @@ export class DestructibleBlock extends GameObject {
     ));
   }
 
-  protected onEnterSession(session: GameSession) {}
+  public parse() {
+    return {
+      id: this.id,
+      type: 'destructible block',
+      position: this.pos,
+      extras: []
+    };
+  }
 
-  protected onLeaveSession(session: GameSession) {}
+  protected onEnterTree() {}
+
+  protected onExitTree() {}
 }

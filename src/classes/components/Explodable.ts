@@ -13,7 +13,11 @@ export class Explodable extends Component {
   }
 
   public static explode(obj: GameObject) {
-    const comp = obj.findComponent('Explodable') as Explodable;
+    const comp = obj.findComponent('Explodable') as Explodable | null;
     if (comp) comp.explodeFunction();
   }
+
+  protected onEnterTree() {}
+
+  protected onExitTree() {}
 }

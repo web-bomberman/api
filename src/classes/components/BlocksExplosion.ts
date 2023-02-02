@@ -13,4 +13,8 @@ export class BlocksExplosion extends Component {
     }
     return false;
   }
+
+  protected onEnterTree() {}
+
+  protected onExitTree() {}
 }

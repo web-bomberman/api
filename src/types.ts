@@ -21,17 +21,18 @@ export type PlayerState =
 | 'ready'
 | 'connected'
 | 'reconnecting'
-| 'disconnected';
+| 'disconnected'
 
 export type SessionState = 
   | 'room'
   | 'starting'
   | 'running'
-  | 'over';
+  | 'paused'
+  | 'over'
 
-export type Tile = '_' | 'X' | '#' | '1' | '2';
+export type Tile = '_' | 'X' | '#' | '1' | '2'
 
-export type TileMap = readonly Tile[][];
+export type TileMap = readonly Tile[][]
 
 export type TokenPayload = {
   player: 1 | 2;
@@ -43,4 +44,4 @@ export type ValidatedTokenPayload = {
   session: GameSession;
 }
 
-export type Vector = [number, number];
+export type Vector = [number, number]

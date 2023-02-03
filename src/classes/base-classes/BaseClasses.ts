@@ -94,8 +94,8 @@ export class GameSession extends Node {
   public state: SessionState;
   public player1: PlayerState;
   public player2: PlayerState;
-  public mapSize: Vector;
-
+  
+  private size: Vector;
   private objectIdCount: number = 0;
   private durationSeconds: number = 0;
   private secondsP1LastPing: number = 0;
@@ -108,7 +108,7 @@ export class GameSession extends Node {
     this.state = 'room';
     this.player1 = 'waiting';
     this.player2 = 'waiting';
-    this.mapSize = [0, 0];
+    this.size = [0, 0];
   }
 
   protected onEnterTree() {}
@@ -117,6 +117,10 @@ export class GameSession extends Node {
 
   public getGameObjects() {
     return [...this.children] as GameObject[];
+  }
+
+  public getSize() {
+    return [...this.size] as Vector;
   }
 
   public addObject(obj: GameObject) {
@@ -141,6 +145,7 @@ export class GameSession extends Node {
       state: this.state,
       player1: this.player1,
       player2: this.player2,
+      size: this.size,
       gameObjects: []
     };
     const gameObjects = this.getGameObjects();
@@ -162,11 +167,11 @@ export class GameSession extends Node {
     }
   }
 
-  public startGame(objects: GameObject[], mapSize: Vector) {
+  public startGame(objects: GameObject[], size: Vector) {
     this.state === 'starting';
     this.player1 === 'connected';
     this.player2 === 'connected';
-    this.mapSize = mapSize;
+    this.size = size;
     for (const obj of objects) {
       this.addObject(obj);
     }

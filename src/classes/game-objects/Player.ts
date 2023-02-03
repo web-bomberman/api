@@ -25,8 +25,8 @@ export class Player extends GameObject {
     if (
       newPos[0] <= 0 ||
       newPos[1] <= 0 ||
-      newPos[0] > session.mapSize[0] ||
-      newPos[1] > session.mapSize[1]
+      newPos[0] > session.getSize()[0] ||
+      newPos[1] > session.getSize()[1]
     ) return;
     const objects = session.checkTile(newPos);
     for (const obj of objects) {

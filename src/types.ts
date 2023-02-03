@@ -12,6 +12,7 @@ export type ParsedGameSession = {
   state: SessionState;
   player1: PlayerState;
   player2: PlayerState;
+  size: Vector;
   gameObjects: ParsedGameObject[];
 }
 
@@ -32,7 +33,7 @@ export type SessionState =
 
 export type Tile = '_' | 'X' | '#' | '1' | '2'
 
-export type TileMap = readonly Tile[][]
+export type TileMap = Tile[][]
 
 export type TokenPayload = {
   player: 1 | 2;

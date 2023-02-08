@@ -29,16 +29,16 @@ export function connectToSession(req: Request, res: Response) {
   if (session.player1 === 'waiting') {
     session.player1 = 'not ready';
     const token = signToken(1, sessionId);
-    return res.status(200).send({ token });
+    return res.status(200).send({ token, player: 1 });
   } else if (session.player2 === 'waiting') {
     session.player2 = 'not ready';
     const token = signToken(2, sessionId);
-    return res.status(200).send({ token });
+    return res.status(200).send({ token, player: 2 });
   } else throw new HttpError(403, 'Session full');
 }
 
 export function getSession(_req: Request, res: Response) {
   const { player, session } = res.locals as ValidatedTokenPayload;
   session.playerPinged(player);
-  return res.status(200).send(session.parse());
+  return res.status(200).send({ game: session.parse(), player });
 }

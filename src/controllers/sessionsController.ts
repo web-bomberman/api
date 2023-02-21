@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { v4 } from 'uuid';
+import short from 'short-uuid';
 import jwt from 'jsonwebtoken';
 
 import {
@@ -16,7 +16,7 @@ export function signToken(player: 1 | 2, session: string) {
 }
 
 export function newSession(_req: Request, res: Response) {
-  const id = v4();
+  const id = short.generate();
   SessionManager.newSession(id);
   return res.status(201).send({ session: id });
 }

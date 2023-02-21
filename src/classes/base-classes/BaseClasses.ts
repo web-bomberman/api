@@ -152,6 +152,7 @@ export class GameSession extends Node {
     for (let i = 0; i < gameObjects.length; i++) {
       parsed.gameObjects.push({ ...gameObjects[i].parse() });
     }
+    return parsed;
   }
 
   private timeCheck() {

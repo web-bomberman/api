@@ -15,7 +15,7 @@ sessionsRouter.post(
 );
 
 sessionsRouter.get(
-  'sessions/:sessionId',
+  '/sessions/:sessionId',
   authValidation,
   getSession
 )

@@ -62,3 +62,10 @@ export function setReady(_req: Request, res: Response) {
     throw new HttpError(403, 'Check connection');
   }
 }
+
+export function disconnect(_req: Request, res: Response) {
+  const { player, session } = res.locals as ValidatedTokenPayload;
+  session[`player${player}`] =
+    session.state === 'room' ? 'waiting' : 'disconnected';
+  return res.sendStatus(200);
+}

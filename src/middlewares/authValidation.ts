@@ -29,9 +29,9 @@ export async function authValidation(
     player === 1 && session.player1 === 'disconnected' ||
     player === 2 && session.player2 === 'disconnected'
   ) {
-    throw new HttpError(410);
+    throw new HttpError(403, 'Session over');
   }
   res.locals.player = player;
   res.locals.session = session;
-  next();
+  return next();
 }

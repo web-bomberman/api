@@ -128,7 +128,7 @@ export class GameSession extends Node {
       ) this.player1 = 'disconnected';
       if (
         this.secondsP2LastPing >= 15 &&
-        this.player1 === 'reconnecting'
+        this.player2 === 'reconnecting'
       ) this.player2 = 'disconnected';
       if (
         this.state === 'room' &&

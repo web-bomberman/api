@@ -28,7 +28,6 @@ export type SessionState =
   | 'room'
   | 'starting'
   | 'running'
-  | 'paused'
   | 'over'
 
 export type Tile = '_' | 'X' | '#' | '1' | '2'

@@ -42,3 +42,23 @@ export function getSession(_req: Request, res: Response) {
   session.playerPinged(player);
   return res.status(200).send({ game: session.parse(), player });
 }
+
+export function setReady(_req: Request, res: Response) {
+  const { player, session } = res.locals as ValidatedTokenPayload;
+  session.playerPinged(player);
+  if (player === 1 && session.player1 === 'not ready') {
+    session.player1 = 'ready';
+    return res.status(200).send({ ready: true });
+  } else if (player === 1 && session.player1 === 'ready') {
+    session.player1 = 'not ready';
+    return res.status(200).send({ ready: false });
+  } else if (player === 2 && session.player2 === 'not ready') {
+    session.player2 = 'ready';
+    return res.status(200).send({ ready: true });
+  } else if (player === 2 && session.player2 === 'ready') {
+    session.player2 = 'not ready';
+    return res.status(200).send({ ready: false });
+  } else {
+    throw new HttpError(403, 'Check connection');
+  }
+}

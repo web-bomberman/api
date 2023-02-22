@@ -1,8 +1,20 @@
 import { Router } from 'express';
-import { newSession, connectToSession, getSession } from '@/controllers';
 import { authValidation } from '@/middlewares';
 
+import {
+  newSession,
+  connectToSession,
+  getSession,
+  setReady
+} from '@/controllers';
+
 export const sessionsRouter = Router();
+
+sessionsRouter.get(
+  '/sessions',
+  authValidation,
+  getSession
+);
 
 sessionsRouter.post(
   '/sessions/new',
@@ -10,12 +22,12 @@ sessionsRouter.post(
 );
 
 sessionsRouter.post(
+  '/sessions/ready',
+  authValidation,
+  setReady
+);
+
+sessionsRouter.post(
   '/sessions/:sessionId',
   connectToSession
 );
-
-sessionsRouter.get(
-  '/sessions/:sessionId',
-  authValidation,
-  getSession
-)

@@ -95,7 +95,7 @@ export class GameSession extends Node {
   public player1: PlayerState;
   public player2: PlayerState;
   
-  private size: Vector;
+  private size: Vector = [0, 0];
   private objectIdCount: number = 0;
   private durationSeconds: number = 0;
   private secondsP1LastPing: number = 0;
@@ -108,7 +108,43 @@ export class GameSession extends Node {
     this.state = 'room';
     this.player1 = 'waiting';
     this.player2 = 'waiting';
-    this.size = [0, 0];
+    this.timeCheckInterval = setInterval(() => {
+      this.durationSeconds++;
+      this.secondsP1LastPing++;
+      this.secondsP2LastPing++;
+      if (
+        this.secondsP1LastPing >= 2 &&
+        this.player1 !== 'waiting' &&
+        this.player1 !== 'disconnected'
+      ) this.player1 = 'reconnecting';
+      if (
+        this.secondsP2LastPing >= 2 &&
+        this.player2 !== 'waiting' &&
+        this.player2 !== 'disconnected'
+      ) this.player2 = 'reconnecting';
+      if (
+        this.secondsP1LastPing >= 15 &&
+        this.player1 === 'reconnecting'
+      ) this.player1 = 'disconnected';
+      if (
+        this.secondsP2LastPing >= 15 &&
+        this.player1 === 'reconnecting'
+      ) this.player2 = 'disconnected';
+      if (
+        this.state === 'room' &&
+        this.player1 !== 'disconnected' &&
+        this.player2 === 'disconnected'
+      ) this.player2 = 'waiting';
+      if (
+        this.state === 'room' &&
+        this.player1 === 'disconnected' &&
+        this.player2 !== 'disconnected'
+      ) this.player1 = 'waiting';
+      if (
+        this.player1 === 'disconnected' &&
+        this.player2 === 'disconnected'
+      ) this.stopGame();
+    }, 1000);
   }
 
   protected onEnterTree() {}
@@ -134,11 +170,6 @@ export class GameSession extends Node {
     obj.id = null;
   }
 
-  public playerPinged(player: 1 | 2) {
-    if (player === 1) this.secondsP1LastPing = 0;
-    else if (player === 2) this.secondsP2LastPing = 0;
-  }
-
   public parse() {
     const parsed: ParsedGameSession = {
       id: this.id,
@@ -155,16 +186,19 @@ export class GameSession extends Node {
     return parsed;
   }
 
-  private timeCheck() {
-    this.durationSeconds++;
-    this.secondsP1LastPing++;
-    this.secondsP2LastPing++;
-    if (this.secondsP1LastPing >= 5) this.player1 = 'reconnecting';
-    if (this.secondsP2LastPing >= 5) this.player2 = 'reconnecting';
-    if (this.secondsP1LastPing >= 30) this.player1 = 'disconnected';
-    if (this.secondsP2LastPing >= 30) this.player2 = 'disconnected';
-    if (this.player1 === 'disconnected' && this.player2 === 'disconnected') {
-      this.stopGame();
+  public playerPinged(player: 1 | 2) {
+    if (player === 1) {
+      this.secondsP1LastPing = 0;
+      if (this.player1 === 'reconnecting') {
+        if (this.state === 'room') this.player1 = 'not ready';
+        if (this.state === 'running') this.player1 = 'connected';
+      }
+    } else if (player === 2) {
+      this.secondsP2LastPing = 0;
+      if (this.player2 === 'reconnecting') {
+        if (this.state === 'room') this.player2 = 'not ready';
+        if (this.state === 'running') this.player2 = 'connected';
+      }
     }
   }
 
@@ -176,7 +210,6 @@ export class GameSession extends Node {
     for (const obj of objects) {
       this.addObject(obj);
     }
-    this.timeCheckInterval = setInterval(this.timeCheck, 1000);
   }
 
   public stopGame() {

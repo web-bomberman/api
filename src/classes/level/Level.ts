@@ -79,6 +79,7 @@ export class Level {
     }
     return {
       name: this.name,
+      size: this.size,
       objects
     };
   }

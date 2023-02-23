@@ -1,6 +1,5 @@
 import { Level } from '@/classes';
 import { levels } from '@/levels';
-import { ParsedTile } from '@/types';
 
 export class LevelManager {
   private static instance: LevelManager | undefined;

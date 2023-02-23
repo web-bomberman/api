@@ -42,7 +42,7 @@ export class Level {
     const objects: ParsedTile[] = [];
     for (let i = 0; i <= this.size[0]; i++) {
       for (let j = 0; j <= this.size[1]; j++) {
-        switch (this.tilemap[i][j]) {
+        switch (this.tilemap[j][i]) {
           case '_': {
             break;
           }
@@ -87,7 +87,7 @@ export class Level {
     const objects: GameObject[] = [];
     for (let i = 0; i <= this.size[0]; i++) {
       for (let j = 0; j <= this.size[1]; j++) {
-        switch (this.tilemap[i][j]) {
+        switch (this.tilemap[j][i]) {
           case '_': {
             break;
           }

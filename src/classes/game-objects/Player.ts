@@ -38,7 +38,7 @@ export class Player extends GameObject {
   public parse() {
     return {
       id: this.id,
-      type: `player ${this.player}`,
+      type: `player${this.player}`,
       position: this.pos,
       extras: []
     };

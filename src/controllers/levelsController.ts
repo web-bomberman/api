@@ -7,5 +7,5 @@ export function getLevels(_req: Request, res: Response) {
   for (const level of levels) {
     parsedLevels.push(level.parse());
   }
-  return res.status(200).send(levels);
+  return res.status(200).send(parsedLevels);
 }

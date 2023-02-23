@@ -18,7 +18,7 @@ export class DestructibleBlock extends GameObject {
   public parse() {
     return {
       id: this.id,
-      type: 'destructible block',
+      type: 'destructible',
       position: this.pos,
       extras: []
     };

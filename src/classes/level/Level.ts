@@ -77,7 +77,10 @@ export class Level {
         }
       }
     }
-    return objects;
+    return {
+      name: this.name,
+      objects
+    };
   }
 
   public generateObjects() {

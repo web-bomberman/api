@@ -1,5 +1,4 @@
 import { GameSession } from '@/classes';
-import { TileMap } from '@/types';
 
 export class SessionManager {
   private static instance: SessionManager | undefined;

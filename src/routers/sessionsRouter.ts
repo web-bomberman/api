@@ -12,29 +12,29 @@ import {
 export const sessionsRouter = Router();
 
 sessionsRouter.get(
-  '/',
+  '/sessions',
   authValidation,
   getSession
 );
 
 sessionsRouter.post(
-  '/new',
+  '/sessions/new',
   newSession
 );
 
 sessionsRouter.post(
-  '/connect/:sessionId',
+  '/sessions/connect/:sessionId',
   connectToSession
 );
 
 sessionsRouter.post(
-  '/ready',
+  '/sessions/ready',
   authValidation,
   setReady
 );
 
 sessionsRouter.post(
-  '/leave',
+  '/sessions/leave',
   authValidation,
   disconnect
 );

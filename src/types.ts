@@ -7,6 +7,11 @@ export type ParsedGameObject = {
   extras: string[];
 }
 
+export type ParsedTile = {
+  object: string;
+  position: Vector;
+}
+
 export type ParsedGameSession = {
   id: string;
   state: SessionState;

@@ -1,12 +1,7 @@
 import { Request, Response } from 'express';
 import short from 'short-uuid';
 import jwt from 'jsonwebtoken';
-
-import {
-  SessionManager,
-  HttpError
-} from '@/classes';
-
+import { SessionManager, HttpError } from '@/classes';
 import { ValidatedTokenPayload } from '@/types';
 
 const SECRET = process.env.JWT_SECRET as string;

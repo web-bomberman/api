@@ -6,15 +6,19 @@ import {
 } from '@/classes';
 
 import {
+  ParsedTile,
   TileMap,
   Vector
 } from '@/types';
 
 export class Level {
+  public name: string;
+
   private tilemap: TileMap;
   private size: Vector;
 
-  constructor(tilemap: TileMap) {
+  constructor(name: string, tilemap: TileMap) {
+    this.name = name;
     this.tilemap = tilemap;
     this.size = [tilemap[0].length - 1, tilemap.length - 1];
   }
@@ -32,6 +36,48 @@ export class Level {
 
   public getSize() {
     return this.size;
+  }
+
+  public parse() {
+    const objects: ParsedTile[] = [];
+    for (let i = 0; i <= this.size[0]; i++) {
+      for (let j = 0; j <= this.size[1]; j++) {
+        switch (this.tilemap[i][j]) {
+          case '_': {
+            break;
+          }
+          case '#': {
+            objects.push({
+              object: 'indestructible',
+              position: [j, this.size[0] - i]
+            });
+            break;
+          }
+          case 'X': {
+            objects.push({
+              object: 'destructible',
+              position: [j, this.size[0] - i]
+            });
+            break;
+          }
+          case '1': {
+            objects.push({
+              object: 'player1',
+              position: [j, this.size[0] - i]
+            });
+            break;
+          }
+          case '2': {
+            objects.push({
+              object: 'player2',
+              position: [j, this.size[0] - i]
+            });
+            break;
+          }
+        }
+      }
+    }
+    return objects;
   }
 
   public generateObjects() {

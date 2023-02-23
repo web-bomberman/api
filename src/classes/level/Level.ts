@@ -20,7 +20,7 @@ export class Level {
   constructor(name: string, tilemap: TileMap) {
     this.name = name;
     this.tilemap = tilemap;
-    this.size = [tilemap[0].length - 1, tilemap.length - 1];
+    this.size = [tilemap[0].length, tilemap.length];
   }
 
   public getTileMap() {
@@ -40,8 +40,8 @@ export class Level {
 
   public parse() {
     const objects: ParsedTile[] = [];
-    for (let i = 0; i <= this.size[0]; i++) {
-      for (let j = 0; j <= this.size[1]; j++) {
+    for (let i = 0; i < this.size[0]; i++) {
+      for (let j = 0; j < this.size[1]; j++) {
         switch (this.tilemap[j][i]) {
           case '_': {
             break;
@@ -49,28 +49,28 @@ export class Level {
           case '#': {
             objects.push({
               object: 'indestructible',
-              position: [j, this.size[0] - i]
+              position: [i + 1, j + 1]
             });
             break;
           }
           case 'X': {
             objects.push({
               object: 'destructible',
-              position: [j, this.size[0] - i]
+              position: [i + 1, j + 1]
             });
             break;
           }
           case '1': {
             objects.push({
               object: 'player1',
-              position: [j, this.size[0] - i]
+              position: [i + 1, j + 1]
             });
             break;
           }
           case '2': {
             objects.push({
               object: 'player2',
-              position: [j, this.size[0] - i]
+              position: [i + 1, j + 1]
             });
             break;
           }

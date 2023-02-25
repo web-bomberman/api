@@ -86,8 +86,8 @@ export class Level {
 
   public generateObjects() {
     const objects: GameObject[] = [];
-    for (let i = 0; i <= this.size[0]; i++) {
-      for (let j = 0; j <= this.size[1]; j++) {
+    for (let i = 0; i < this.size[0]; i++) {
+      for (let j = 0; j < this.size[1]; j++) {
         switch (this.tilemap[j][i]) {
           case '_': {
             break;

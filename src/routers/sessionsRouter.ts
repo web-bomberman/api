@@ -6,7 +6,8 @@ import {
   disconnect,
   getSession,
   newSession,
-  setReady
+  setReady,
+  startGame
 } from '@/controllers';
 
 export const sessionsRouter = Router();
@@ -31,6 +32,12 @@ sessionsRouter.post(
   '/sessions/ready',
   authValidation,
   setReady
+);
+
+sessionsRouter.post(
+  '/sessions/start/:levelName',
+  authValidation,
+  startGame
 );
 
 sessionsRouter.post(

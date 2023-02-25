@@ -113,12 +113,12 @@ export class GameSession extends Node {
       this.secondsP1LastPing++;
       this.secondsP2LastPing++;
       if (
-        this.secondsP1LastPing >= 2 &&
+        this.secondsP1LastPing >= 5 &&
         this.player1 !== 'waiting' &&
         this.player1 !== 'disconnected'
       ) this.player1 = 'reconnecting';
       if (
-        this.secondsP2LastPing >= 2 &&
+        this.secondsP2LastPing >= 5 &&
         this.player2 !== 'waiting' &&
         this.player2 !== 'disconnected'
       ) this.player2 = 'reconnecting';
@@ -203,13 +203,16 @@ export class GameSession extends Node {
   }
 
   public startGame(objects: GameObject[], size: Vector) {
-    this.state === 'starting';
+    this.state = 'starting';
     this.player1 === 'connected';
     this.player2 === 'connected';
     this.size = size;
     for (const obj of objects) {
       this.addObject(obj);
     }
+    setTimeout(() => {
+      this.state = 'running';
+    }, 3000);
   }
 
   public stopGame() {

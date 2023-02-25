@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import short from 'short-uuid';
 import jwt from 'jsonwebtoken';
-import { SessionManager, HttpError } from '@/classes';
+import { SessionManager, HttpError, LevelManager } from '@/classes';
 import { ValidatedTokenPayload } from '@/types';
 
 const SECRET = process.env.JWT_SECRET as string;
@@ -56,6 +56,16 @@ export function setReady(_req: Request, res: Response) {
   } else {
     throw new HttpError(403, 'Check connection');
   }
+}
+
+export function startGame(req: Request, res: Response) {
+  const { levelName } = req.params;
+  const { player, session } = res.locals as ValidatedTokenPayload;
+  if (player !== 1) throw new HttpError(401);
+  const level = LevelManager.findLevel(levelName);
+  if (!level) throw new HttpError(404, 'Level not found');
+  session.startGame(level.generateObjects(), level.getSize());
+  return res.sendStatus(200);
 }
 
 export function disconnect(_req: Request, res: Response) {

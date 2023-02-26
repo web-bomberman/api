@@ -110,8 +110,8 @@ export class GameSession extends Node {
     this.player2 = 'waiting';
     this.timeCheckInterval = setInterval(() => {
       this.durationSeconds++;
-      this.secondsP1LastPing++;
-      this.secondsP2LastPing++;
+      if (this.player1 !== 'waiting') this.secondsP1LastPing++;
+      if (this.player2 !== 'waiting') this.secondsP2LastPing++;
       if (
         this.secondsP1LastPing >= 5 &&
         this.player1 !== 'waiting' &&
@@ -134,12 +134,18 @@ export class GameSession extends Node {
         this.state === 'room' &&
         this.player1 !== 'disconnected' &&
         this.player2 === 'disconnected'
-      ) this.player2 = 'waiting';
+      ) {
+        this.player2 = 'waiting';
+        this.secondsP2LastPing = 0;
+      }
       if (
         this.state === 'room' &&
         this.player1 === 'disconnected' &&
         this.player2 !== 'disconnected'
-      ) this.player1 = 'waiting';
+      ) {
+        this.player1 = 'waiting';
+        this.secondsP1LastPing = 0;
+      }
       if (
         this.player1 === 'disconnected' &&
         this.player2 === 'disconnected'
@@ -204,8 +210,8 @@ export class GameSession extends Node {
 
   public startGame(objects: GameObject[], size: Vector) {
     this.state = 'starting';
-    this.player1 === 'connected';
-    this.player2 === 'connected';
+    this.player1 = 'connected';
+    this.player2 = 'connected';
     this.size = size;
     for (const obj of objects) {
       this.addObject(obj);

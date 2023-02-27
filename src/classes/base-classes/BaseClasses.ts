@@ -221,8 +221,9 @@ export class GameSession extends Node {
     }, 3000);
   }
 
-  public stopGame() {
-    this.state = 'over';
+  public stopGame(player?: 1 | 2) {
+    if (player) this.state = `player${player} won`;
+    else this.state = 'interrupted';
     if (this.timeCheckInterval) clearInterval(this.timeCheckInterval);
     setTimeout(() => this.removeSelf(), 5000)
   }

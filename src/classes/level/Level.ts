@@ -94,25 +94,25 @@ export class Level {
           }
           case '#': {
             const obj = new IndestructibleBlock();
-            obj.pos = [j, this.size[0] - i];
+            obj.pos = [i + 1, this.size[1] - j];
             objects.push(obj);
             break;
           }
           case 'X': {
             const obj = new DestructibleBlock();
-            obj.pos = [j, this.size[0] - i];
+            obj.pos = [i + 1, this.size[1] - j];
             objects.push(obj);
             break;
           }
           case '1': {
             const obj = new Player(1);
-            obj.pos = [j, this.size[0] - i];
+            obj.pos = [i + 1, this.size[1] - j];
             objects.push(obj);
             break;
           }
           case '2': {
             const obj = new Player(2);
-            obj.pos = [j, this.size[0] - i];
+            obj.pos = [i + 1, this.size[1] - j];
             objects.push(obj);
             break;
           }

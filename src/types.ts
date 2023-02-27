@@ -22,18 +22,20 @@ export type ParsedGameSession = {
 }
 
 export type PlayerState =
-| 'waiting'
-| 'not ready'
-| 'ready'
-| 'connected'
-| 'reconnecting'
-| 'disconnected'
+  | 'waiting'
+  | 'not ready'
+  | 'ready'
+  | 'connected'
+  | 'reconnecting'
+  | 'disconnected'
 
 export type SessionState = 
   | 'room'
   | 'starting'
   | 'running'
-  | 'over'
+  | 'interrupted'
+  | 'player1 won'
+  | 'player2 won'
 
 export type Tile = '_' | 'X' | '#' | '1' | '2'
 

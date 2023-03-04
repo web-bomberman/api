@@ -64,7 +64,9 @@ export function startGame(req: Request, res: Response) {
   if (player !== 1) throw new HttpError(401);
   const level = LevelManager.findLevel(levelName);
   if (!level) throw new HttpError(404, 'Level not found');
-  session.startGame(level.generateObjects(), level.getSize());
+  const { objects, player1, player2} = level.generateObjects();
+  if (!player1 || !player2) throw new HttpError(422, 'Bad level');
+  session.startGame(objects, player1, player2, level.getSize());
   return res.sendStatus(200);
 }
 

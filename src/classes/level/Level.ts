@@ -85,7 +85,15 @@ export class Level {
   }
 
   public generateObjects() {
-    const objects: GameObject[] = [];
+    const returnValue: {
+      objects: GameObject[],
+      player1: Player | null,
+      player2: Player | null
+    } = {
+      objects: [],
+      player1: null,
+      player2: null
+    };
     for (let i = 0; i < this.size[0]; i++) {
       for (let j = 0; j < this.size[1]; j++) {
         switch (this.tilemap[j][i]) {
@@ -95,30 +103,32 @@ export class Level {
           case '#': {
             const obj = new IndestructibleBlock();
             obj.pos = [i + 1, this.size[1] - j];
-            objects.push(obj);
+            returnValue.objects.push(obj);
             break;
           }
           case 'X': {
             const obj = new DestructibleBlock();
             obj.pos = [i + 1, this.size[1] - j];
-            objects.push(obj);
+            returnValue.objects.push(obj);
             break;
           }
           case '1': {
             const obj = new Player(1);
             obj.pos = [i + 1, this.size[1] - j];
-            objects.push(obj);
+            returnValue.objects.push(obj);
+            returnValue.player1 = obj;
             break;
           }
           case '2': {
             const obj = new Player(2);
             obj.pos = [i + 1, this.size[1] - j];
-            objects.push(obj);
+            returnValue.objects.push(obj);
+            returnValue.player2 = obj;
             break;
           }
         }
       }
     }
-    return objects;
+    return returnValue;
   }
 }

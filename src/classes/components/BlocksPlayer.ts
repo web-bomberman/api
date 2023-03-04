@@ -7,7 +7,7 @@ export class BlocksPlayer extends Component {
 
   public static blocksPlayer(obj: GameObject) {
     for (const comp of obj.getComponents()) {
-      if (comp instanceof BlocksPlayer) {
+      if (comp.constructor.name === 'BlocksPlayer') {
         return true;
       }
     }

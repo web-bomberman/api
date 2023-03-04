@@ -95,9 +95,11 @@ export class GameSession extends Node {
   public player1: PlayerState;
   public player2: PlayerState;
   
+  private player1Obj: GameObject | null = null;
+  private player2Obj: GameObject | null = null;
   private size: Vector = [0, 0];
   private objectIdCount: number = 0;
-  private durationSeconds: number = 0;
+  // private durationSeconds: number = 0;
   private secondsP1LastPing: number = 0;
   private secondsP2LastPing: number = 0;
   private timeCheckInterval: NodeJS.Timer | null = null;
@@ -109,7 +111,7 @@ export class GameSession extends Node {
     this.player1 = 'waiting';
     this.player2 = 'waiting';
     this.timeCheckInterval = setInterval(() => {
-      this.durationSeconds++;
+      // this.durationSeconds++;
       if (this.player1 !== 'waiting') this.secondsP1LastPing++;
       if (this.player2 !== 'waiting') this.secondsP2LastPing++;
       if (
@@ -208,10 +210,17 @@ export class GameSession extends Node {
     }
   }
 
-  public startGame(objects: GameObject[], size: Vector) {
+  public startGame(
+    objects: GameObject[],
+    player1: GameObject,
+    player2: GameObject,
+    size: Vector
+  ) {
     this.state = 'starting';
     this.player1 = 'connected';
     this.player2 = 'connected';
+    this.player1Obj = player1;
+    this.player2Obj = player2;
     this.size = size;
     for (const obj of objects) {
       this.addObject(obj);
@@ -229,11 +238,13 @@ export class GameSession extends Node {
   }
 
   public checkTile(pos: Vector) {
-    const objects: GameObject[] = [];
-    const gameObjects = this.getGameObjects();
-    for (let i = 0; i < gameObjects.length; i++) {
-      if (gameObjects[i].pos === pos) objects.push(gameObjects[i]);
-    }
-    return objects;
+    return this.getGameObjects().filter(
+      (obj) => (obj.pos[0] === pos[0] && obj.pos[1] === pos[1])
+    );
+  }
+
+  public getPlayer(player: 1 | 2) {
+    if (player === 1) return this.player1Obj;
+    else return this.player2Obj;
   }
 }

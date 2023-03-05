@@ -8,14 +8,17 @@ import { Vector } from '@/types';
 
 export class Player extends GameObject {
   public readonly player: 1 | 2;
+  public bombRange: number = 3;
+  public bombQuantity: number = 1;
+  public piercingBombs: boolean = false;
 
   constructor(player: 1 | 2) {
     super();
     this.player = player;
     this.addComponent(new BlocksPlayer());
-    this.addComponent(new Explodable(
-      () => console.log(`Player ${this.player} died!`)
-    ));
+    this.addComponent(new Explodable(() => {
+      this.getSession().stopGame(this.player === 1 ? 2 : 1);
+    }));
   }
 
   public move(dist: Vector) {

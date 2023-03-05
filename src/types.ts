@@ -37,6 +37,15 @@ export type SessionState =
   | 'player1 won'
   | 'player2 won'
 
+export type ExplosionTypes =
+  | 'center'
+  | 'horizontal'
+  | 'vertical'
+  | 'up-end'
+  | 'right-end'
+  | 'down-end'
+  | 'left-end'
+
 export type Tile = '_' | 'X' | '#' | '1' | '2'
 
 export type TileMap = Tile[][]

@@ -38,8 +38,21 @@ export function inputBomb(_req: Request, res: Response) {
   const { player, session } = res.locals as ValidatedTokenPayload;
   const playerObj = session.getPlayer(player) as Player;
   if (!playerObj) throw new HttpError(403, 'Bad game session');
-  const bombObj = new Bomb(player, 3, false);
-  bombObj.pos = playerObj.pos;
-  session.addObject(bombObj);
+  let bombsOut: number = 0;
+  for (const obj of session.getGameObjects()) {
+    if (
+      obj.constructor.name === 'Bomb' &&
+      (obj as Bomb).player === player
+    ) bombsOut++;
+  }
+  if (bombsOut < playerObj.bombQuantity) {
+    const bombObj = new Bomb(
+      player,
+      playerObj.bombRange,
+      playerObj.piercingBombs
+    );
+    bombObj.pos = playerObj.pos;
+    session.addObject(bombObj);
+  }
   return res.sendStatus(200);
 }

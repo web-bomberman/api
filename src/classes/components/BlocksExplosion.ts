@@ -7,7 +7,7 @@ export class BlocksExplosion extends Component {
 
   public static blocksExplosion(obj: GameObject) {
     for (const comp of obj.getComponents()) {
-      if (comp.constructor.name === 'BlocksExplosion') return true;
+      if (comp instanceof BlocksExplosion) return true;
     }
     return false;
   }

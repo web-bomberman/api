@@ -3,3 +3,7 @@ export * from './DestructibleBlock';
 export * from './Explosion';
 export * from './IndestructibleBlock';
 export * from './Player';
+export * from './PowerUpArmor';
+export * from './PowerUpBombs';
+export * from './PowerUpNitro';
+export * from './PowerUpRadius';

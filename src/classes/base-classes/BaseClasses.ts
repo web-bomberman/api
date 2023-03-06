@@ -1,6 +1,6 @@
 // This folder is meant to contain the base classes for game objects,
-// components and game sessions in the composite pattern. We're doing this
-// to avoid problems with circular loading of modules.
+// components and game sessions in the composite pattern. The area
+// We're doing this to avoid problems with circular loading of modules.
 
 import {
   ParsedGameObject,
@@ -55,11 +55,13 @@ export abstract class Component extends Node {
 export abstract class GameObject extends Node {
   public id: number | null;
   public pos: Vector;
+  public solid: boolean;
   
   constructor() {
     super();
     this.id = null;
     this.pos = [0, 0];
+    this.solid = true;
   }
 
   public getSession() {
@@ -88,6 +90,14 @@ export abstract class GameObject extends Node {
   public abstract parse(): ParsedGameObject;
 }
 
+export abstract class Area extends GameObject {
+  constructor() {
+    super();
+  }
+
+  public abstract onObjectEntered(obj: GameObject): void;
+}
+
 export class GameSession extends Node {
   public readonly id: string;
 
@@ -99,7 +109,6 @@ export class GameSession extends Node {
   private player2Obj: GameObject | null = null;
   private size: Vector = [0, 0];
   private objectIdCount: number = 0;
-  // private durationSeconds: number = 0;
   private secondsP1LastPing: number = 0;
   private secondsP2LastPing: number = 0;
   private timeCheckInterval: NodeJS.Timer | null = null;
@@ -111,7 +120,6 @@ export class GameSession extends Node {
     this.player1 = 'waiting';
     this.player2 = 'waiting';
     this.timeCheckInterval = setInterval(() => {
-      // this.durationSeconds++;
       if (this.player1 !== 'waiting') this.secondsP1LastPing++;
       if (this.player2 !== 'waiting') this.secondsP2LastPing++;
       if (
@@ -241,6 +249,25 @@ export class GameSession extends Node {
     return this.getGameObjects().filter(
       (obj) => (obj.pos[0] === pos[0] && obj.pos[1] === pos[1])
     );
+  }
+
+  public moveObject(obj: GameObject, dist: Vector) {
+    const newPos: Vector = [obj.pos[0] + dist[0], obj.pos[1] + dist[1]];
+    if (
+      newPos[0] <= 0 ||
+      newPos[1] <= 0 ||
+      newPos[0] > this.size[0] ||
+      newPos[1] > this.size[1]
+    ) return;
+    const areas: Area[] = [];
+    for (const object of this.checkTile(newPos)) {
+      if (object.solid) return;
+      if (object instanceof Area) areas.push(object);
+    }
+    obj.pos = newPos;
+    for (const area of areas) {
+      area.onObjectEntered(obj);
+    }
   }
 
   public getPlayer(player: 1 | 2) {

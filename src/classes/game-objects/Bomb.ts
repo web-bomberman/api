@@ -1,7 +1,6 @@
 import {
-  BlocksPlayer,
   BlocksExplosion,
-  BlocksPiercingExplosion,
+  BlocksNitro,
   Explodable,
   Explosion,
   GameObject
@@ -11,22 +10,21 @@ import { ExplosionTypes, Vector } from '@/types';
 
 export class Bomb extends GameObject {
   public readonly player: 1 | 2;
-  public readonly range: number;
-  public readonly piercing: boolean;
+  public readonly radius: number;
+  public readonly nitro: boolean;
 
   private explodeTimeout: NodeJS.Timeout | null = null;
 
-  constructor(player: 1 | 2, range: number, piercing: boolean) {
+  constructor(player: 1 | 2, radius: number, nitro: boolean) {
     super();
     this.player = player;
-    this.range = range;
-    this.piercing = piercing;
-    this.addComponent(new BlocksPlayer());
+    this.radius = radius;
+    this.nitro = nitro;
     this.addComponent(new Explodable(() => {
       const session = this.getSession();  // recording these values
       const pos = this.pos;               // so we can access them
-      const range = this.range;           // after object is removed
-      const piercing = this.piercing;
+      const radius = this.radius;           // after object is removed
+      const nitro = this.nitro;
       this.removeSelf();
       const centerExplosion = new Explosion('center');
       centerExplosion.pos = this.pos;
@@ -41,7 +39,7 @@ export class Bomb extends GameObject {
           down: ['down-end', 'vertical'],
           left: ['left-end', 'horizontal']
         }[direction] as [ExplosionTypes, ExplosionTypes];
-        for (let i = 1; i <= range; i++) {
+        for (let i = 1; i <= radius; i++) {
           const point: Vector = [pos[0] + dir[0] * i, pos[1] + dir[1] * i];
 
           // Checks if current tile is out of bounds
@@ -54,7 +52,7 @@ export class Bomb extends GameObject {
     
           // Checks if the current tile has an object that blocks the explosion
           let interruptLine: boolean = false;
-          if (!piercing) {
+          if (!nitro) {
             for (const obj of session.checkTile(point)) {
               if (BlocksExplosion.blocksExplosion(obj)) {
                 interruptLine = true;
@@ -63,7 +61,7 @@ export class Bomb extends GameObject {
             }
           } else {
             for (const obj of session.checkTile(point)) {
-              if (BlocksPiercingExplosion.blocksPiercingExplosion(obj)) {
+              if (BlocksNitro.blocksNitro(obj)) {
                 interruptLine = true;
                 break;
               };
@@ -71,7 +69,7 @@ export class Bomb extends GameObject {
           }
 
           // Spawns the explosion
-          const explosion = new Explosion(i === range ? type[0] : type[1]);
+          const explosion = new Explosion(i === radius ? type[0] : type[1]);
           explosion.pos = point;
           session.addObject(explosion);
           if (interruptLine) break;

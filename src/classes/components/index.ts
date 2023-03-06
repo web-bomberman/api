@@ -1,4 +1,3 @@
 export * from './BlocksExplosion';
-export * from './BlocksPiercingExplosion';
-export * from './BlocksPlayer';
+export * from './BlocksNitro';
 export * from './Explodable';

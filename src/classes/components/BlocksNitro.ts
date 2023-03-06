@@ -1,13 +1,13 @@
 import { Component, GameObject } from '@/classes';
 
-export class BlocksPiercingExplosion extends Component {
+export class BlocksNitro extends Component {
   constructor() {
     super();
   }
 
-  public static blocksPiercingExplosion(obj: GameObject) {
+  public static blocksNitro(obj: GameObject) {
     for (const comp of obj.getComponents()) {
-      if (comp.constructor.name === 'BlocksPiercingExplosion') return true;
+      if (comp instanceof BlocksNitro) return true;
     }
     return false;
   }

@@ -1,49 +1,42 @@
 import {
-  BlocksPlayer,
   Explodable,
-  GameObject
+  GameObject,
 } from '@/classes';
-
-import { Vector } from '@/types';
 
 export class Player extends GameObject {
   public readonly player: 1 | 2;
-  public bombRange: number = 3;
+  public bombRadius: number = 3;
   public bombQuantity: number = 1;
-  public piercingBombs: boolean = false;
+  public nitro: boolean = false;
+  public armor: boolean = false;
+
+  private dead: boolean = false;
 
   constructor(player: 1 | 2) {
     super();
     this.player = player;
-    this.addComponent(new BlocksPlayer());
     this.addComponent(new Explodable(() => {
-      this.getSession().stopGame(this.player === 1 ? 2 : 1);
+      if (this.armor) this.armor = false;
+      else {
+        this.getSession().stopGame(this.player === 1 ? 2 : 1);
+        this.dead = true;
+      }
     }));
   }
 
-  public move(dist: Vector) {
-    const session = this.getSession();
-    if (!session) return;
-    const newPos: Vector = [this.pos[0] + dist[0], this.pos[1] + dist[1]];
-    if (
-      newPos[0] <= 0 ||
-      newPos[1] <= 0 ||
-      newPos[0] > session.getSize()[0] ||
-      newPos[1] > session.getSize()[1]
-    ) return;
-    const objects = session.checkTile(newPos);
-    for (const obj of objects) {
-      if (BlocksPlayer.blocksPlayer(obj)) return;
-    }
-    this.pos = newPos;
-  }
-
   public parse() {
+    const extras = [
+      `bomb-radius: ${this.bombRadius}`,
+      `bomb-quantity: ${this.bombQuantity}`,
+      `nitro-bombs: ${this.nitro}`,
+      `protective-armor: ${this.armor}`,
+    ];
+    if (this.dead) extras.push('dead');
     return {
       id: this.id,
       type: `player${this.player}`,
       position: this.pos,
-      extras: []
+      extras
     };
   }
 

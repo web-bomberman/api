@@ -11,6 +11,7 @@ export class Explosion extends GameObject {
 
   constructor(type: ExplosionTypes) {
     super();
+    this.solid = false;
     this.type = type;
   }
 

@@ -1,23 +1,26 @@
 import {
-  BlocksExplosion,
-  BlocksNitro,
-  GameObject
+  Area,
+  GameObject,
+  Player
 } from '@/classes';
 
-export class IndestructibleBlock extends GameObject {
+export class PowerUpNitro extends Area {
   constructor() {
     super();
-    this.addComponent(new BlocksExplosion());
-    this.addComponent(new BlocksNitro());
+    this.solid = false;
   }
 
   public parse() {
     return {
       id: this.id,
-      type: 'indestructible',
+      type: 'powerup-nitro',
       position: this.pos,
       extras: []
     };
+  }
+
+  public onObjectEntered(obj: GameObject) {
+    if (obj instanceof Player) obj.nitro = true;
   }
 
   protected onEnterTree() {}

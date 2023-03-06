@@ -1,6 +1,6 @@
 import {
   Explodable,
-  GameObject,
+  GameObject
 } from '@/classes';
 
 export class Player extends GameObject {
@@ -10,8 +10,6 @@ export class Player extends GameObject {
   public nitro: boolean = false;
   public armor: boolean = false;
 
-  private dead: boolean = false;
-
   constructor(player: 1 | 2) {
     super();
     this.player = player;
@@ -19,7 +17,6 @@ export class Player extends GameObject {
       if (this.armor) this.armor = false;
       else {
         this.getSession().stopGame(this.player === 1 ? 2 : 1);
-        this.dead = true;
       }
     }));
   }
@@ -31,7 +28,6 @@ export class Player extends GameObject {
       `nitro-bombs: ${this.nitro}`,
       `protective-armor: ${this.armor}`,
     ];
-    if (this.dead) extras.push('dead');
     return {
       id: this.id,
       type: `player${this.player}`,

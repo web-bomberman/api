@@ -107,12 +107,18 @@ export class Level {
           case 'X': {
             const obj = new DestructibleBlock();
             obj.pos = [i + 1, this.size[1] - j];
-            if (i + 1 <= Math.floor(this.size[0] / 2)) {
+            objects.push(obj);
+            if (this.size[0] % 2 === 1 && i + 1 === this.size[0] / 2 + 0.5) {
+              if (this.size[1] - j <= this.size[1] / 2) {
+                leftWalls.push([i + 1, this.size[1] - j]);
+              } else {
+                rightWalls.push([i + 1, this.size[1] - j]);
+              }
+            } else if (i + 1 <= this.size[0] / 2) {
               leftWalls.push([i + 1, this.size[1] - j]);
             } else {
               rightWalls.push([i + 1, this.size[1] - j]);
             }
-            objects.push(obj);
             break;
           }
           case '1': {

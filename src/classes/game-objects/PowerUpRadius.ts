@@ -7,7 +7,6 @@ import {
 export class PowerUpRadius extends Area {
   constructor() {
     super();
-    this.solid = false;
   }
 
   public parse() {

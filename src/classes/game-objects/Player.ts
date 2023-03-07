@@ -1,7 +1,8 @@
 import {
   Bomb,
   Explodable,
-  GameObject
+  GameObject,
+  GameSession
 } from '@/classes';
 
 export class Player extends GameObject {
@@ -11,13 +12,28 @@ export class Player extends GameObject {
   public nitro: boolean = false;
   public armor: boolean = false;
 
+  private dead: boolean = false;
+ 
+  private static players: {
+    [sessionId: string]: { 1: Player | null, 2: Player | null };
+  } = {};
+
   constructor(player: 1 | 2) {
     super();
     this.player = player;
     this.addComponent(new Explodable(() => {
       if (this.armor) this.armor = false;
       else {
-        this.getSession().stopGame(this.player === 1 ? 2 : 1);
+        this.dead = true;
+        setTimeout(() => {
+          const session = this.getSession();
+          const player1 = Player.findPlayer(1, session);
+          const player2 = Player.findPlayer(2, session);
+          if (!player1 || !player2) return;
+          if (player1.dead && player2.dead) session.stopGame('draw');
+          else if (player1.dead && !player2.dead) session.stopGame(2);
+          else if (!player1.dead && player2.dead) session.stopGame(1);
+        }, 100)
       }
     }));
   }
@@ -47,6 +63,21 @@ export class Player extends GameObject {
       bomb.pos = this.pos;
       this.getSession().addObject(bomb);
     }
+  }
+
+  public static findPlayer(player: 1 | 2, session: GameSession) {
+    if (!this.players[session.id]) {
+      this.players[session.id] = { 1: null, 2: null};
+      for (const obj of session.getGameObjects()) {
+        if (obj instanceof Player) {
+          this.players[session.id][obj.player] = obj;
+        }
+      }
+      setInterval(() => {
+        delete this.players[session.id];
+      }, 10000);
+    }
+    return this.players[session.id][player];
   }
 
   protected onEnterTree() {}

@@ -89,15 +89,7 @@ export class Level {
   }
 
   public generateObjects() {
-    const returnValue: {
-      objects: GameObject[],
-      player1: Player | null,
-      player2: Player | null
-    } = {
-      objects: [],
-      player1: null,
-      player2: null
-    };
+    const objects: GameObject[] = [];
     const leftWalls: Vector[] = [];
     const rightWalls: Vector[] = [];
     for (let i = 0; i < this.size[0]; i++) {
@@ -109,7 +101,7 @@ export class Level {
           case '#': {
             const obj = new IndestructibleBlock();
             obj.pos = [i + 1, this.size[1] - j];
-            returnValue.objects.push(obj);
+            objects.push(obj);
             break;
           }
           case 'X': {
@@ -120,21 +112,19 @@ export class Level {
             } else {
               rightWalls.push([i + 1, this.size[1] - j]);
             }
-            returnValue.objects.push(obj);
+            objects.push(obj);
             break;
           }
           case '1': {
             const obj = new Player(1);
             obj.pos = [i + 1, this.size[1] - j];
-            returnValue.objects.push(obj);
-            returnValue.player1 = obj;
+            objects.push(obj);
             break;
           }
           case '2': {
             const obj = new Player(2);
             obj.pos = [i + 1, this.size[1] - j];
-            returnValue.objects.push(obj);
-            returnValue.player2 = obj;
+            objects.push(obj);
             break;
           }
         }
@@ -148,7 +138,7 @@ export class Level {
       else if (i === 6) leftPowerUp = new PowerUpArmor();
       else leftPowerUp = new PowerUpNitro();
       leftPowerUp.pos = leftWalls.splice(leftRNG, 1)[0];
-      returnValue.objects.push(leftPowerUp);
+      objects.push(leftPowerUp);
       let rightPowerUp: GameObject;
       const rightRNG = Math.floor(Math.random() * rightWalls.length);
       if (i < 3) rightPowerUp = new PowerUpBombs();
@@ -156,8 +146,8 @@ export class Level {
       else if (i === 6) rightPowerUp = new PowerUpArmor();
       else rightPowerUp = new PowerUpNitro();
       rightPowerUp.pos = rightWalls.splice(rightRNG, 1)[0];
-      returnValue.objects.push(rightPowerUp);
+      objects.push(rightPowerUp);
     }
-    return returnValue;
+    return objects;
   }
 }

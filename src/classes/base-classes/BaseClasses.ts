@@ -93,6 +93,7 @@ export abstract class GameObject extends Node {
 export abstract class Area extends GameObject {
   constructor() {
     super();
+    this.solid = false;
   }
 
   public abstract onObjectEntered(obj: GameObject): void;
@@ -105,8 +106,6 @@ export class GameSession extends Node {
   public player1: PlayerState;
   public player2: PlayerState;
   
-  private player1Obj: GameObject | null = null;
-  private player2Obj: GameObject | null = null;
   private size: Vector = [0, 0];
   private levelName: string = 'Basic';
   private objectIdCount: number = 0;
@@ -230,15 +229,11 @@ export class GameSession extends Node {
 
   public startGame(
     objects: GameObject[],
-    player1: GameObject,
-    player2: GameObject,
     size: Vector
   ) {
     this.state = 'starting';
     this.player1 = 'connected';
     this.player2 = 'connected';
-    this.player1Obj = player1;
-    this.player2Obj = player2;
     this.size = size;
     for (const obj of objects) {
       this.addObject(obj);
@@ -248,8 +243,10 @@ export class GameSession extends Node {
     }, 3000);
   }
 
-  public stopGame(player?: 1 | 2) {
-    if (player) this.state = `player${player} won`;
+  public stopGame(player?: 1 | 2 | 'draw') {
+    if (this.state !== 'running') return;
+    if (player === 1 || player === 2) this.state = `player${player} won`;
+    else if (player === 'draw') this.state = 'draw';
     else this.state = 'interrupted';
     if (this.timeCheckInterval) clearInterval(this.timeCheckInterval);
     setTimeout(() => this.removeSelf(), 5000)
@@ -278,10 +275,5 @@ export class GameSession extends Node {
     for (const area of areas) {
       area.onObjectEntered(obj);
     }
-  }
-
-  public getPlayer(player: 1 | 2) {
-    if (player === 1) return this.player1Obj;
-    else return this.player2Obj;
   }
 }

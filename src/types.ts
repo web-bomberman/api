@@ -37,6 +37,7 @@ export type SessionState =
   | 'interrupted'
   | 'player1 won'
   | 'player2 won'
+  | 'draw'
 
 export type ExplosionTypes =
   | 'center'

@@ -23,7 +23,7 @@ export class Bomb extends GameObject {
     this.addComponent(new Explodable(() => {
       const session = this.getSession();  // recording these values
       const pos = this.pos;               // so we can access them
-      const radius = this.radius;           // after object is removed
+      const radius = this.radius;         // after object is removed
       const nitro = this.nitro;
       this.removeSelf();
       const centerExplosion = new Explosion('center');
@@ -69,7 +69,9 @@ export class Bomb extends GameObject {
           }
 
           // Spawns the explosion
-          const explosion = new Explosion(i === radius ? type[0] : type[1]);
+          const explosion = new Explosion(
+            i === radius || interruptLine ? type[0] : type[1]
+          );
           explosion.pos = point;
           session.addObject(explosion);
           if (interruptLine) break;

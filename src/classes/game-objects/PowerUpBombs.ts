@@ -20,8 +20,8 @@ export class PowerUpBombs extends Area {
   }
 
   public onObjectEntered(obj: GameObject) {
-    if (obj instanceof Player && obj.bombQuantity <= 5) {
-      obj.bombQuantity += 1;
+    if (obj instanceof Player) {
+      if (obj.bombQuantity < 6) obj.bombQuantity += 1;
       this.removeSelf();
     }
   }

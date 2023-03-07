@@ -20,7 +20,10 @@ export class PowerUpRadius extends Area {
   }
 
   public onObjectEntered(obj: GameObject) {
-    if (obj instanceof Player && obj.bombRadius <= 9) obj.bombRadius += 2;
+    if (obj instanceof Player && obj.bombRadius <= 9) {
+      obj.bombRadius += 2;
+      this.removeSelf();
+    }
   }
 
   protected onEnterTree() {}

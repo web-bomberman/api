@@ -20,7 +20,10 @@ export class PowerUpNitro extends Area {
   }
 
   public onObjectEntered(obj: GameObject) {
-    if (obj instanceof Player) obj.nitro = true;
+    if (obj instanceof Player) {
+      obj.nitro = true;
+      this.removeSelf();
+    }
   }
 
   protected onEnterTree() {}

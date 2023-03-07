@@ -2,7 +2,11 @@ import {
   DestructibleBlock,
   GameObject,
   IndestructibleBlock,
-  Player
+  Player,
+  PowerUpArmor,
+  PowerUpBombs,
+  PowerUpNitro,
+  PowerUpRadius
 } from '@/classes';
 
 import {
@@ -94,6 +98,8 @@ export class Level {
       player1: null,
       player2: null
     };
+    const leftWalls: Vector[] = [];
+    const rightWalls: Vector[] = [];
     for (let i = 0; i < this.size[0]; i++) {
       for (let j = 0; j < this.size[1]; j++) {
         switch (this.tilemap[j][i]) {
@@ -109,6 +115,11 @@ export class Level {
           case 'X': {
             const obj = new DestructibleBlock();
             obj.pos = [i + 1, this.size[1] - j];
+            if (i + 1 <= Math.floor(this.size[0] / 2)) {
+              leftWalls.push([i + 1, this.size[1] - j]);
+            } else {
+              rightWalls.push([i + 1, this.size[1] - j]);
+            }
             returnValue.objects.push(obj);
             break;
           }
@@ -128,6 +139,24 @@ export class Level {
           }
         }
       }
+    }
+    for (let i = 0; i < 8; i++) {
+      let leftPowerUp: GameObject;
+      const leftRNG = Math.floor(Math.random() * leftWalls.length);
+      if (i < 3) leftPowerUp = new PowerUpBombs();
+      else if (i < 6) leftPowerUp = new PowerUpRadius();
+      else if (i === 6) leftPowerUp = new PowerUpArmor();
+      else leftPowerUp = new PowerUpNitro();
+      leftPowerUp.pos = leftWalls.splice(leftRNG, 1)[0];
+      returnValue.objects.push(leftPowerUp);
+      let rightPowerUp: GameObject;
+      const rightRNG = Math.floor(Math.random() * rightWalls.length);
+      if (i < 3) rightPowerUp = new PowerUpBombs();
+      else if (i < 6) rightPowerUp = new PowerUpRadius();
+      else if (i === 6) rightPowerUp = new PowerUpArmor();
+      else rightPowerUp = new PowerUpNitro();
+      rightPowerUp.pos = rightWalls.splice(rightRNG, 1)[0];
+      returnValue.objects.push(rightPowerUp);
     }
     return returnValue;
   }

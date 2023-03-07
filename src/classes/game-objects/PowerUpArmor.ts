@@ -20,7 +20,10 @@ export class PowerUpArmor extends Area {
   }
 
   public onObjectEntered(obj: GameObject) {
-    if (obj instanceof Player) obj.armor = true;
+    if (obj instanceof Player) {
+      obj.armor = true;
+      this.removeSelf();
+    }
   }
 
   protected onEnterTree() {}

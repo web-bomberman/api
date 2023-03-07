@@ -108,6 +108,7 @@ export class GameSession extends Node {
   private player1Obj: GameObject | null = null;
   private player2Obj: GameObject | null = null;
   private size: Vector = [0, 0];
+  private levelName: string = 'Basic';
   private objectIdCount: number = 0;
   private secondsP1LastPing: number = 0;
   private secondsP2LastPing: number = 0;
@@ -193,6 +194,7 @@ export class GameSession extends Node {
       player1: this.player1,
       player2: this.player2,
       size: this.size,
+      level: this.levelName,
       gameObjects: []
     };
     const gameObjects = this.getGameObjects();
@@ -200,6 +202,14 @@ export class GameSession extends Node {
       parsed.gameObjects.push({ ...gameObjects[i].parse() });
     }
     return parsed;
+  }
+
+  public getLevel() {
+    return this.levelName;
+  }
+
+  public setLevel(level: string) {
+    this.levelName = level;
   }
 
   public playerPinged(player: 1 | 2) {

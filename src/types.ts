@@ -18,6 +18,7 @@ export type ParsedGameSession = {
   player1: PlayerState;
   player2: PlayerState;
   size: Vector;
+  level: string;
   gameObjects: ParsedGameObject[];
 }
 

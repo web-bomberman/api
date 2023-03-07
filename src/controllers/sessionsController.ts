@@ -19,7 +19,7 @@ export function newSession(_req: Request, res: Response) {
 export function connectToSession(req: Request, res: Response) {
   const { sessionId } = req.params;
   const session = SessionManager.findSession(sessionId);
-  if (!session) throw new HttpError(404)
+  if (!session) throw new HttpError(404);
   if (session.state !== 'room') throw new HttpError(403, 'Game running');
   if (session.player1 === 'waiting') {
     session.player1 = 'not ready';
@@ -36,6 +36,17 @@ export function getSession(_req: Request, res: Response) {
   const { player, session } = res.locals as ValidatedTokenPayload;
   session.playerPinged(player);
   return res.status(200).send({ game: session.parse(), player });
+}
+
+export function pickLevel(req: Request, res: Response) {
+  const { player, session } = res.locals as ValidatedTokenPayload;
+  session.playerPinged(player);
+  if (player !== 1) throw new HttpError(403);
+  const { levelName } = req.params;
+  const level = LevelManager.findLevel(levelName);
+  if (!level) throw new HttpError(404);
+  session.setLevel(level.name);
+  return res.status(200).send(level.parse());
 }
 
 export function setReady(_req: Request, res: Response) {
@@ -58,11 +69,10 @@ export function setReady(_req: Request, res: Response) {
   }
 }
 
-export function startGame(req: Request, res: Response) {
-  const { levelName } = req.params;
+export function startGame(_req: Request, res: Response) {
   const { player, session } = res.locals as ValidatedTokenPayload;
   if (player !== 1) throw new HttpError(401);
-  const level = LevelManager.findLevel(levelName);
+  const level = LevelManager.findLevel(session.getLevel());
   if (!level) throw new HttpError(404, 'Level not found');
   const { objects, player1, player2} = level.generateObjects();
   if (!player1 || !player2) throw new HttpError(422, 'Bad level');

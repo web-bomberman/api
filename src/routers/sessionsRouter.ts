@@ -6,6 +6,7 @@ import {
   disconnect,
   getSession,
   newSession,
+  pickLevel,
   setReady,
   startGame
 } from '@/controllers';
@@ -35,9 +36,15 @@ sessionsRouter.post(
 );
 
 sessionsRouter.post(
-  '/sessions/start/:levelName',
+  '/sessions/start-game',
   authValidation,
   startGame
+);
+
+sessionsRouter.post(
+  '/sessions/pick-level/:levelName',
+  authValidation,
+  pickLevel
 );
 
 sessionsRouter.post(

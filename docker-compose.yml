@@ -12,3 +12,17 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     ports:
       - ${PORT}:${PORT}
+  web:
+    container_name: web
+    image: nginx:1.23-alpine
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx:/etc/nginx/conf.d/:ro
+      - ~/html:/var/www/html:ro
+      - ~/certbot/www/:/var/www/certbot/:ro
+      - ~/certbot/conf/:/etc/nginx/ssl/:ro
+    depends_on:
+      - api

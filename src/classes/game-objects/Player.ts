@@ -1,9 +1,4 @@
-import {
-  Bomb,
-  Explodable,
-  GameObject,
-  GameSession
-} from '@/classes';
+import { Bomb, Explodable, GameObject, GameSession } from '@/classes';
 
 export class Player extends GameObject {
   public readonly player: 1 | 2;
@@ -13,32 +8,34 @@ export class Player extends GameObject {
   public armor: boolean = false;
 
   private dead: boolean = false;
- 
+
   private static players: {
-    [sessionId: string]: { 1: Player | null, 2: Player | null };
+    [sessionId: string]: { 1: Player | null; 2: Player | null };
   } = {};
 
   constructor(player: 1 | 2) {
     super();
     this.player = player;
-    this.addComponent(new Explodable(() => {
-      if (this.armor) {
-        setTimeout(() => {
-          this.armor = false;
-        }, 100)
-      } else {
-        this.dead = true;
-        setTimeout(() => {
-          const session = this.getSession();
-          const player1 = Player.findPlayer(1, session);
-          const player2 = Player.findPlayer(2, session);
-          if (!player1 || !player2) return;
-          if (player1.dead && player2.dead) session.stopGame('draw');
-          else if (player1.dead && !player2.dead) session.stopGame(2);
-          else if (!player1.dead && player2.dead) session.stopGame(1);
-        }, 100)
-      }
-    }));
+    this.addComponent(
+      new Explodable(() => {
+        if (this.armor) {
+          setTimeout(() => {
+            this.armor = false;
+          }, 100);
+        } else {
+          this.dead = true;
+          setTimeout(() => {
+            const session = this.getSession();
+            const player1 = Player.findPlayer(1, session);
+            const player2 = Player.findPlayer(2, session);
+            if (!player1 || !player2) return;
+            if (player1.dead && player2.dead) session.stopGame('draw');
+            else if (player1.dead && !player2.dead) session.stopGame(2);
+            else if (!player1.dead && player2.dead) session.stopGame(1);
+          }, 100);
+        }
+      })
+    );
   }
 
   public parse() {
@@ -52,7 +49,7 @@ export class Player extends GameObject {
       id: this.id,
       type: `player${this.player}`,
       position: this.pos,
-      extras
+      extras,
     };
   }
 
@@ -70,7 +67,7 @@ export class Player extends GameObject {
 
   public static findPlayer(player: 1 | 2, session: GameSession) {
     if (!this.players[session.id]) {
-      this.players[session.id] = { 1: null, 2: null};
+      this.players[session.id] = { 1: null, 2: null };
       for (const obj of session.getGameObjects()) {
         if (obj instanceof Player) {
           this.players[session.id][obj.player] = obj;

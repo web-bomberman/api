@@ -1,8 +1,4 @@
-import {
-  BlocksExplosion,
-  BlocksNitro,
-  GameObject
-} from '@/classes';
+import { BlocksExplosion, BlocksNitro, GameObject } from '@/classes';
 
 export class IndestructibleBlock extends GameObject {
   constructor() {
@@ -16,7 +12,7 @@ export class IndestructibleBlock extends GameObject {
       id: this.id,
       type: 'indestructible',
       position: this.pos,
-      extras: []
+      extras: [],
     };
   }
 

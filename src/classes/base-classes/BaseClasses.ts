@@ -7,7 +7,7 @@ import {
   ParsedGameSession,
   PlayerState,
   SessionState,
-  Vector
+  Vector,
 } from '@/types';
 
 export abstract class Node {
@@ -56,7 +56,7 @@ export abstract class GameObject extends Node {
   public id: number | null;
   public pos: Vector;
   public solid: boolean;
-  
+
   constructor() {
     super();
     this.id = null;
@@ -105,7 +105,7 @@ export class GameSession extends Node {
   public state: SessionState;
   public player1: PlayerState;
   public player2: PlayerState;
-  
+
   private size: Vector = [0, 0];
   private levelName: string = 'Basic';
   private objectIdCount: number = 0;
@@ -126,20 +126,18 @@ export class GameSession extends Node {
         this.secondsP1LastPing >= 5 &&
         this.player1 !== 'waiting' &&
         this.player1 !== 'disconnected'
-      ) this.player1 = 'reconnecting';
+      )
+        this.player1 = 'reconnecting';
       if (
         this.secondsP2LastPing >= 5 &&
         this.player2 !== 'waiting' &&
         this.player2 !== 'disconnected'
-      ) this.player2 = 'reconnecting';
-      if (
-        this.secondsP1LastPing >= 15 &&
-        this.player1 === 'reconnecting'
-      ) this.player1 = 'disconnected';
-      if (
-        this.secondsP2LastPing >= 15 &&
-        this.player2 === 'reconnecting'
-      ) this.player2 = 'disconnected';
+      )
+        this.player2 = 'reconnecting';
+      if (this.secondsP1LastPing >= 15 && this.player1 === 'reconnecting')
+        this.player1 = 'disconnected';
+      if (this.secondsP2LastPing >= 15 && this.player2 === 'reconnecting')
+        this.player2 = 'disconnected';
       if (
         this.state === 'room' &&
         this.player1 !== 'disconnected' &&
@@ -156,10 +154,8 @@ export class GameSession extends Node {
         this.player1 = 'waiting';
         this.secondsP1LastPing = 0;
       }
-      if (
-        this.player1 === 'disconnected' &&
-        this.player2 === 'disconnected'
-      ) this.stopGame();
+      if (this.player1 === 'disconnected' && this.player2 === 'disconnected')
+        this.stopGame();
     }, 1000);
   }
 
@@ -194,7 +190,7 @@ export class GameSession extends Node {
       player2: this.player2,
       size: this.size,
       level: this.levelName,
-      gameObjects: []
+      gameObjects: [],
     };
     const gameObjects = this.getGameObjects();
     for (let i = 0; i < gameObjects.length; i++) {
@@ -227,10 +223,7 @@ export class GameSession extends Node {
     }
   }
 
-  public startGame(
-    objects: GameObject[],
-    size: Vector
-  ) {
+  public startGame(objects: GameObject[], size: Vector) {
     this.state = 'starting';
     this.player1 = 'connected';
     this.player2 = 'connected';
@@ -249,12 +242,12 @@ export class GameSession extends Node {
     else if (player === 'draw') this.state = 'draw';
     else this.state = 'interrupted';
     if (this.timeCheckInterval) clearInterval(this.timeCheckInterval);
-    setTimeout(() => this.removeSelf(), 5000)
+    setTimeout(() => this.removeSelf(), 5000);
   }
 
   public checkTile(pos: Vector) {
     return this.getGameObjects().filter(
-      (obj) => (obj.pos[0] === pos[0] && obj.pos[1] === pos[1])
+      (obj) => obj.pos[0] === pos[0] && obj.pos[1] === pos[1]
     );
   }
 
@@ -265,7 +258,8 @@ export class GameSession extends Node {
       newPos[1] <= 0 ||
       newPos[0] > this.size[0] ||
       newPos[1] > this.size[1]
-    ) return;
+    )
+      return;
     const areas: Area[] = [];
     for (const object of this.checkTile(newPos)) {
       if (object.solid) return;

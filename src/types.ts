@@ -5,12 +5,12 @@ export type ParsedGameObject = {
   type: string;
   position: Vector;
   extras: string[];
-}
+};
 
 export type ParsedTile = {
   object: string;
   position: Vector;
-}
+};
 
 export type ParsedGameSession = {
   id: string;
@@ -20,7 +20,7 @@ export type ParsedGameSession = {
   size: Vector;
   level: string;
   gameObjects: ParsedGameObject[];
-}
+};
 
 export type PlayerState =
   | 'waiting'
@@ -28,16 +28,16 @@ export type PlayerState =
   | 'ready'
   | 'connected'
   | 'reconnecting'
-  | 'disconnected'
+  | 'disconnected';
 
-export type SessionState = 
+export type SessionState =
   | 'room'
   | 'starting'
   | 'running'
   | 'interrupted'
   | 'player1 won'
   | 'player2 won'
-  | 'draw'
+  | 'draw';
 
 export type ExplosionTypes =
   | 'center'
@@ -46,20 +46,20 @@ export type ExplosionTypes =
   | 'up-end'
   | 'right-end'
   | 'down-end'
-  | 'left-end'
+  | 'left-end';
 
-export type Tile = '_' | 'X' | '#' | '1' | '2'
+export type Tile = '_' | 'X' | '#' | '1' | '2';
 
-export type TileMap = Tile[][]
+export type TileMap = Tile[][];
 
 export type TokenPayload = {
   player: 1 | 2;
   session: string;
-}
+};
 
 export type ValidatedTokenPayload = {
   player: 1 | 2;
   session: GameSession;
-}
+};
 
-export type Vector = [number, number]
+export type Vector = [number, number];

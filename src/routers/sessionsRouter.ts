@@ -8,38 +8,20 @@ import {
   newSession,
   pickLevel,
   setReady,
-  startGame
+  startGame,
 } from '@/controllers';
 
 export const sessionsRouter = Router();
 
-sessionsRouter.get(
-  '/sessions',
-  authValidation,
-  getSession
-);
+sessionsRouter.get('/sessions', authValidation, getSession);
 
-sessionsRouter.post(
-  '/sessions/new',
-  newSession
-);
+sessionsRouter.post('/sessions/new', newSession);
 
-sessionsRouter.post(
-  '/sessions/connect/:sessionId',
-  connectToSession
-);
+sessionsRouter.post('/sessions/connect/:sessionId', connectToSession);
 
-sessionsRouter.post(
-  '/sessions/ready',
-  authValidation,
-  setReady
-);
+sessionsRouter.post('/sessions/ready', authValidation, setReady);
 
-sessionsRouter.post(
-  '/sessions/start-game',
-  authValidation,
-  startGame
-);
+sessionsRouter.post('/sessions/start-game', authValidation, startGame);
 
 sessionsRouter.post(
   '/sessions/pick-level/:levelName',
@@ -47,8 +29,4 @@ sessionsRouter.post(
   pickLevel
 );
 
-sessionsRouter.post(
-  '/sessions/leave',
-  authValidation,
-  disconnect
-);
+sessionsRouter.post('/sessions/leave', authValidation, disconnect);

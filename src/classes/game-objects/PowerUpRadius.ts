@@ -1,8 +1,4 @@
-import {
-  Area,
-  GameObject,
-  Player
-} from '@/classes';
+import { Area, GameObject, Player } from '@/classes';
 
 export class PowerUpRadius extends Area {
   constructor() {
@@ -14,7 +10,7 @@ export class PowerUpRadius extends Area {
       id: this.id,
       type: 'powerup-radius',
       position: this.pos,
-      extras: []
+      extras: [],
     };
   }
 

@@ -6,14 +6,10 @@ import {
   PowerUpArmor,
   PowerUpBombs,
   PowerUpNitro,
-  PowerUpRadius
+  PowerUpRadius,
 } from '@/classes';
 
-import {
-  ParsedTile,
-  TileMap,
-  Vector
-} from '@/types';
+import { ParsedTile, TileMap, Vector } from '@/types';
 
 export class Level {
   public name: string;
@@ -32,7 +28,7 @@ export class Level {
     for (let i = 0; i < this.size[0]; i++) {
       map.push([]);
       for (let j = 0; j < this.size[1]; j++) {
-        map[i].push(this.tilemap[j][ this.size[0] - i]);
+        map[i].push(this.tilemap[j][this.size[0] - i]);
       }
     }
     return map;
@@ -53,28 +49,28 @@ export class Level {
           case '#': {
             objects.push({
               object: 'indestructible',
-              position: [i + 1, j + 1]
+              position: [i + 1, j + 1],
             });
             break;
           }
           case 'X': {
             objects.push({
               object: 'destructible',
-              position: [i + 1, j + 1]
+              position: [i + 1, j + 1],
             });
             break;
           }
           case '1': {
             objects.push({
               object: 'player1',
-              position: [i + 1, j + 1]
+              position: [i + 1, j + 1],
             });
             break;
           }
           case '2': {
             objects.push({
               object: 'player2',
-              position: [i + 1, j + 1]
+              position: [i + 1, j + 1],
             });
             break;
           }
@@ -84,7 +80,7 @@ export class Level {
     return {
       name: this.name,
       size: this.size,
-      objects
+      objects,
     };
   }
 

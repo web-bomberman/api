@@ -1,3 +1,5 @@
+/* eslint no-console: off */
+
 import app from './app';
 
 const PORT = process.env.PORT;

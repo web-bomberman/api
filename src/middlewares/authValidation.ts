@@ -26,8 +26,8 @@ export async function authValidation(
   if (auth.slice(0, 7) != 'Bearer ') throw new HttpError(401);
   const { player, session } = validateToken(auth.replace('Bearer ', ''));
   if (
-    player === 1 && session.player1 === 'disconnected' ||
-    player === 2 && session.player2 === 'disconnected'
+    (player === 1 && session.player1 === 'disconnected') ||
+    (player === 2 && session.player2 === 'disconnected')
   ) {
     throw new HttpError(403, 'Session over');
   }

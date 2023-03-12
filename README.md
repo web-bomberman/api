@@ -41,6 +41,16 @@ Both Docker and non-Docker versions use the same `.env.development` file.
 Also, remember to stop the containers and bring run them again to get any
 changes.
 
+## Formatting and Linters
+
+We're using the classic ESLinter + Prettier combination. Run the following
+before pushing to the repository and make sure you fix all errors
+
+```
+npm run lint
+npm run format
+```
+
 ## Credits
 
 [Rafael Bordoni](https://github.com/eldskald)

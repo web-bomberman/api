@@ -9,7 +9,7 @@ export class Explodable extends Component {
   }
 
   public static isExplodable(obj: GameObject) {
-    return !!(obj.findComponent('Explodable'));
+    return !!obj.findComponent('Explodable');
   }
 
   public static explode(obj: GameObject) {

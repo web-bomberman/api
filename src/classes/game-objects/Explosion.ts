@@ -1,7 +1,4 @@
-import {
-  Explodable,
-  GameObject
-} from '@/classes';
+import { Explodable, GameObject } from '@/classes';
 
 import { ExplosionTypes } from '@/types';
 
@@ -31,7 +28,7 @@ export class Explosion extends GameObject {
       id: this.id,
       type: 'explosion',
       position: this.pos,
-      extras: [this.type]
+      extras: [this.type],
     };
   }
 }

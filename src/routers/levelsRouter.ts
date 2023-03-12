@@ -3,7 +3,4 @@ import { getLevels } from '@/controllers';
 
 export const levelsRouter = Router();
 
-levelsRouter.get(
-  '/levels',
-  getLevels
-);
+levelsRouter.get('/levels', getLevels);

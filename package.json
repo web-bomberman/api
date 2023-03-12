@@ -20,7 +20,7 @@
     "dev:docker:down": "npm run dev:docker:compose -- down",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write 'src/**/*.ts'"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
@@ -31,6 +31,7 @@
     "dotenv-cli": "^7.0.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.4",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.1.2",

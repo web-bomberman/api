@@ -44,11 +44,16 @@ changes.
 ## Formatting and Linters
 
 We're using the classic ESLinter + Prettier combination. Run the following
-before pushing to the repository and make sure you fix all errors
+before pushing to the repository and make sure you fix all errors.
 
 ```
 npm run lint
-npm run format
+```
+
+The errors that can be automatically fixed can be done so by running this:
+
+```
+npm run lint:fix
 ```
 
 ## Credits

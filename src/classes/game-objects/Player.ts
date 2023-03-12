@@ -22,8 +22,11 @@ export class Player extends GameObject {
     super();
     this.player = player;
     this.addComponent(new Explodable(() => {
-      if (this.armor) this.armor = false;
-      else {
+      if (this.armor) {
+        setTimeout(() => {
+          this.armor = false;
+        }, 100)
+      } else {
         this.dead = true;
         setTimeout(() => {
           const session = this.getSession();

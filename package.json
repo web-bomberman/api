@@ -14,7 +14,10 @@
   "scripts": {
     "build": "tsc",
     "start": "node -r dotenv/config -r ts-node/register/transpile-only -r tsconfig-paths/register dist/main.js",
-    "dev": "NODE_ENV=development ts-node-dev --exit-child -r dotenv/config -r tsconfig-paths/register src/main.ts dotenv_config_path=./.env.development"
+    "dev": "NODE_ENV=development ts-node-dev --exit-child -r dotenv/config -r tsconfig-paths/register src/main.ts dotenv_config_path=./.env.development",
+    "dev:docker:compose": "docker compose -f docker-compose.development.yml --env-file .env.development",
+    "dev:docker:up": "npm run dev:docker:compose -- up -d",
+    "dev:docker:down": "npm run dev:docker:compose -- down"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

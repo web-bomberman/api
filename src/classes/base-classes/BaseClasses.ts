@@ -1,6 +1,6 @@
 // This folder is meant to contain the base classes for game objects,
-// components and game sessions in the composite pattern. The area
-// We're doing this to avoid problems with circular loading of modules.
+// components and game sessions in the composite pattern, and the area class
+// too. We're doing this to avoid problems with circular loading of modules.
 
 import {
   ParsedGameObject,
@@ -80,6 +80,13 @@ export abstract class GameObject extends Node {
     this.removeChild(comp);
   }
 
+  // We do this so the game session can update the posTable
+  public removeSelf() {
+    if (this.parent && this.parent instanceof GameSession) {
+      this.parent.removeObject(this);
+    }
+  }
+
   public findComponent(type: string) {
     for (const comp of this.children) {
       if (comp.constructor.name === type) return comp as Component;
@@ -112,6 +119,7 @@ export class GameSession extends Node {
   private secondsP1LastPing: number = 0;
   private secondsP2LastPing: number = 0;
   private timeCheckInterval: NodeJS.Timer | null = null;
+  private posTable: { [coords: string]: GameObject[] } = {};
 
   constructor(id: string) {
     super();
@@ -171,15 +179,33 @@ export class GameSession extends Node {
     return [...this.size] as Vector;
   }
 
+  private putOnPosTable(obj: GameObject, pos: Vector) {
+    const coords = `${pos[0]},${pos[1]}`;
+    if (!this.posTable[coords]) this.posTable[coords] = [];
+    this.posTable[coords].push(obj);
+  }
+
+  private removeFromPosTable(obj: GameObject, pos: Vector) {
+    const coords = `${pos[0]},${pos[1]}`;
+    if (!this.posTable[coords]) return;
+    const objIndex = this.posTable[coords].findIndex((elem) => elem === obj);
+    if (objIndex !== -1) {
+      this.posTable[coords].splice(objIndex, 1);
+      if (this.posTable[coords].length === 0) delete this.posTable[coords];
+    }
+  }
+
   public addObject(obj: GameObject) {
     this.addChild(obj);
     obj.id = this.objectIdCount;
     this.objectIdCount++;
+    this.putOnPosTable(obj, obj.pos);
   }
 
   public removeObject(obj: GameObject) {
-    obj.removeSelf();
+    this.removeChild(obj);
     obj.id = null;
+    this.removeFromPosTable(obj, obj.pos);
   }
 
   public parse() {
@@ -246,9 +272,9 @@ export class GameSession extends Node {
   }
 
   public checkTile(pos: Vector) {
-    return this.getGameObjects().filter(
-      (obj) => obj.pos[0] === pos[0] && obj.pos[1] === pos[1]
-    );
+    const coords = `${pos[0]},${pos[1]}`;
+    if (!this.posTable[coords]) return [];
+    else return this.posTable[coords];
   }
 
   public moveObject(obj: GameObject, dist: Vector) {
@@ -265,6 +291,8 @@ export class GameSession extends Node {
       if (object.solid) return;
       if (object instanceof Area) areas.push(object);
     }
+    this.removeFromPosTable(obj, obj.pos);
+    this.putOnPosTable(obj, newPos);
     obj.pos = newPos;
     for (const area of areas) {
       area.onObjectEntered(obj);

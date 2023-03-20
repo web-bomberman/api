@@ -10,6 +10,6 @@ export async function errorHandler(err: Error, _req: Request, res: Response) {
     return;
   }
 
-  console.log(err);
+  console.error(err);
   return res.sendStatus(500);
 }

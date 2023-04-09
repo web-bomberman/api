@@ -25,7 +25,6 @@ export class Explosion extends GameObject {
 
   public parse() {
     return {
-      id: this.id,
       type: 'explosion',
       position: this.pos,
       extras: [this.type],

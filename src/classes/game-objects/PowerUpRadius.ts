@@ -7,7 +7,6 @@ export class PowerUpRadius extends Area {
 
   public parse() {
     return {
-      id: this.id,
       type: 'powerup-radius',
       position: this.pos,
       extras: [],
@@ -17,6 +16,7 @@ export class PowerUpRadius extends Area {
   public onObjectEntered(obj: GameObject) {
     if (obj instanceof Player) {
       if (obj.bombRadius < 11) obj.bombRadius += 2;
+      this.getSession().updateParsedTable(obj);
       this.removeSelf();
     }
   }

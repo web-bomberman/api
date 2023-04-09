@@ -21,6 +21,7 @@ export class Player extends GameObject {
         if (this.armor) {
           setTimeout(() => {
             this.armor = false;
+            this.getSession().updateParsedTable(this);
           }, 100);
         } else {
           this.dead = true;
@@ -39,17 +40,15 @@ export class Player extends GameObject {
   }
 
   public parse() {
-    const extras = [
-      `bomb-radius: ${this.bombRadius}`,
-      `bomb-quantity: ${this.bombQuantity}`,
-      `nitro-bombs: ${this.nitro}`,
-      `protective-armor: ${this.armor}`,
-    ];
     return {
-      id: this.id,
       type: `player${this.player}`,
       position: this.pos,
-      extras,
+      extras: [
+        `bomb-radius: ${this.bombRadius}`,
+        `bomb-quantity: ${this.bombQuantity}`,
+        `nitro-bombs: ${this.nitro}`,
+        `protective-armor: ${this.armor}`,
+      ],
     };
   }
 

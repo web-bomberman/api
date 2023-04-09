@@ -7,7 +7,6 @@ export class PowerUpBombs extends Area {
 
   public parse() {
     return {
-      id: this.id,
       type: 'powerup-bombs',
       position: this.pos,
       extras: [],
@@ -17,6 +16,7 @@ export class PowerUpBombs extends Area {
   public onObjectEntered(obj: GameObject) {
     if (obj instanceof Player) {
       if (obj.bombQuantity < 6) obj.bombQuantity += 1;
+      this.getSession().updateParsedTable(obj);
       this.removeSelf();
     }
   }

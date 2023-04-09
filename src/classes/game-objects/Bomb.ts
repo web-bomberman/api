@@ -96,7 +96,6 @@ export class Bomb extends GameObject {
 
   public parse() {
     return {
-      id: this.id,
       type: 'bomb',
       position: this.pos,
       extras: [],

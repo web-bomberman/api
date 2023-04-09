@@ -7,7 +7,6 @@ export class PowerUpNitro extends Area {
 
   public parse() {
     return {
-      id: this.id,
       type: 'powerup-nitro',
       position: this.pos,
       extras: [],
@@ -17,6 +16,7 @@ export class PowerUpNitro extends Area {
   public onObjectEntered(obj: GameObject) {
     if (obj instanceof Player) {
       obj.nitro = true;
+      this.getSession().updateParsedTable(obj);
       this.removeSelf();
     }
   }

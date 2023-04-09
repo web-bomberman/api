@@ -2,13 +2,7 @@
 // components and game sessions in the composite pattern, and the area class
 // too. We're doing this to avoid problems with circular loading of modules.
 
-import {
-  ParsedGameObject,
-  ParsedGameSession,
-  PlayerState,
-  SessionState,
-  Vector,
-} from '@/types';
+import { ParsedGameObject, PlayerState, SessionState, Vector } from '@/types';
 
 export abstract class Node {
   protected parent: Node | null = null;
@@ -80,7 +74,7 @@ export abstract class GameObject extends Node {
     this.removeChild(comp);
   }
 
-  // We do this so the game session can update the posTable
+  // We do this so the game session can update the hash tables
   public removeSelf() {
     if (this.parent && this.parent instanceof GameSession) {
       this.parent.removeObject(this);
@@ -115,11 +109,12 @@ export class GameSession extends Node {
 
   private size: Vector = [0, 0];
   private levelName: string = 'Basic';
-  private objectIdCount: number = 0;
+  private objectIdCount: number = 1;
   private secondsP1LastPing: number = 0;
   private secondsP2LastPing: number = 0;
   private timeCheckInterval: NodeJS.Timer | null = null;
   private posTable: { [coords: string]: GameObject[] } = {};
+  private parsedTable: { [id: string]: ParsedGameObject } = {};
 
   constructor(id: string) {
     super();
@@ -200,29 +195,36 @@ export class GameSession extends Node {
     obj.id = this.objectIdCount;
     this.objectIdCount++;
     this.putOnPosTable(obj, obj.pos);
+    this.updateParsedTable(obj);
   }
 
   public removeObject(obj: GameObject) {
     this.removeChild(obj);
-    obj.id = null;
     this.removeFromPosTable(obj, obj.pos);
+    this.removeFromParsedTable(obj);
+    obj.id = null;
+  }
+
+  public updateParsedTable(obj: GameObject) {
+    if (!obj.id) return;
+    this.parsedTable[String(obj.id)] = obj.parse();
+  }
+
+  public removeFromParsedTable(obj: GameObject) {
+    if (!obj.id) return;
+    delete this.parsedTable[String(obj.id)];
   }
 
   public parse() {
-    const parsed: ParsedGameSession = {
+    return {
       id: this.id,
       state: this.state,
       player1: this.player1,
       player2: this.player2,
       size: this.size,
       level: this.levelName,
-      gameObjects: [],
+      gameObjects: this.parsedTable,
     };
-    const gameObjects = this.getGameObjects();
-    for (let i = 0; i < gameObjects.length; i++) {
-      parsed.gameObjects.push({ ...gameObjects[i].parse() });
-    }
-    return parsed;
   }
 
   public getLevel() {
@@ -291,6 +293,7 @@ export class GameSession extends Node {
       if (object.solid) return;
       if (object instanceof Area) areas.push(object);
     }
+    this.parsedTable[String(obj.id)].position = newPos;
     this.removeFromPosTable(obj, obj.pos);
     this.putOnPosTable(obj, newPos);
     obj.pos = newPos;

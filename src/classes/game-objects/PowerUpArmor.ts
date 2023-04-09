@@ -7,7 +7,6 @@ export class PowerUpArmor extends Area {
 
   public parse() {
     return {
-      id: this.id,
       type: 'powerup-armor',
       position: this.pos,
       extras: [],
@@ -17,6 +16,7 @@ export class PowerUpArmor extends Area {
   public onObjectEntered(obj: GameObject) {
     if (obj instanceof Player) {
       obj.armor = true;
+      this.getSession().updateParsedTable(obj);
       this.removeSelf();
     }
   }
